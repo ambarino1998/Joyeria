@@ -195,7 +195,7 @@
             transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* LA CAPA OSCURA QUE APARECE CON EL TEXTO (HOVER) */
+        /* LA CAPA OSCURA QUE APARECE CON EL TEXTO (HOVER EN PC) */
         .capa-descripcion {
             position: absolute;
             top: 0;
@@ -232,18 +232,20 @@
             transition: transform 0.4s ease 0.1s; /* Ligero retraso para dar fluidez */
         }
 
-        /* ACTIVACIÓN DEL EFECTO AL PASAR EL MOUSE */
-        .galeria-item:hover .capa-descripcion {
-            opacity: 1;
-        }
+        /* ACTIVACIÓN DEL EFECTO AL PASAR EL MOUSE (SÓLO PC) */
+        @media (min-width: 769px) {
+            .galeria-item:hover .capa-descripcion {
+                opacity: 1;
+            }
 
-        .galeria-item:hover .capa-descripcion h3,
-        .galeria-item:hover .capa-descripcion p {
-            transform: translateY(0);
-        }
+            .galeria-item:hover .capa-descripcion h3,
+            .galeria-item:hover .capa-descripcion p {
+                transform: translateY(0);
+            }
 
-        .galeria-item:hover .imagen-fluida {
-            transform: scale(1.06);
+            .galeria-item:hover .imagen-fluida {
+                transform: scale(1.06);
+            }
         }
 
         /* 2. SECCIÓN: TIENDA */
@@ -365,9 +367,43 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* RESPONSIVO / OPTIMIZACIÓN PARA CELULAR */
         @media (max-width: 768px) {
             .galeria-grid, .tienda-grid {
                 grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .galeria-img-container {
+                height: 350px; /* Un tamaño más cómodo para pantallas verticales */
+            }
+
+            /* RE-ESTRUCTURACIÓN DE LA DESCRIPCIÓN EN MÓVILES */
+            .capa-descripcion {
+                position: relative; /* Ya no flota sobre la imagen */
+                opacity: 1; /* Es visible siempre */
+                background-color: var(--card-bg); /* Fondo claro a tono con el producto */
+                color: var(--text-color); /* Texto oscuro legible */
+                padding: 20px 15px;
+                height: auto;
+            }
+
+            .capa-descripcion h3 {
+                transform: none;
+                font-size: 18px;
+                color: var(--text-color);
+                margin-bottom: 5px;
+            }
+
+            .capa-descripcion p {
+                transform: none;
+                font-size: 13px;
+                color: var(--text-color);
+                opacity: 0.8;
+            }
+            
+            .intro h1 {
+                font-size: 26px;
             }
         }
     </style>
@@ -392,7 +428,7 @@
             <p>Modelamos metales nobles y seleccionamos gemas auténticas para dar vida a piezas con historia, mística y carácter.</p>
         </section>
 
-        <!-- SECCIÓN 1: GALERÍA DE AUTOR (Con textos ocultos interactivos) -->
+        <!-- SECCIÓN 1: GALERÍA DE AUTOR -->
         <section id="galeria" class="revelar">
             <h2 class="section-title">Piezas de Autor / Galería</h2>
             <div class="galeria-grid">
@@ -402,7 +438,6 @@
                     <div class="galeria-img-container">
                         <img src="imagenes/anillo-verde.jpg" alt="Anillo Esmeralda Ambarino 1998" class="imagen-fluida">
                     </div>
-                    <!-- Esta es la capa que se activa al pasar el mouse -->
                     <div class="capa-descripcion">
                         <h3>Anillo Esmeralda</h3>
                         <p>Oro de 18k esculpido a mano. Cuenta con una esmeralda natural de corte simétrico, inspirada en las líneas clásicas del taller.</p>
@@ -473,7 +508,7 @@
         <section id="contacto" class="cta-bodas revelar">
             <h2 style="text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">¿Buscas algo único o Argollas de Matrimonio?</h2>
             <p>Agenda una sesión personalizada para diseñar tus joyas ideales o argollas de boda desde cero.</p>
-            <a href="https://wa.me/573219659337text=Hola%20Ambarino,%20me%20interesa%20agendar%20una%20asesoría%20para%20un%20diseño%20personalizado" class="btn-whatsapp" target="_blank">Contactar por WhatsApp</a>
+            <a href="https://wa.me/573219659337?text=Hola%20Ambarino,%20me%20interesa%20agendar%20una%20asesoría%20para%20un%20diseño%20personalizado" class="btn-whatsapp" target="_blank">Contactar por WhatsApp</a>
         </section>
 
     </div>
@@ -492,7 +527,7 @@
                 const margenRevelado = 100;
                 
                 if (elementoTop < ventanaTop - margenRevelado) {
-                    elemento.classList.add('activo');
+                    elementos.forEach(() => elemento.classList.add('activo'));
                 }
             });
         }
