@@ -7,17 +7,18 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@200;300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
     
     <script type="text/javascript" src="https://checkout.epayco.co/checkout.js"></script>
     
     <style>
         :root {
-            --bg-canvas: #f5efe5;      /* Lienzo marfil de alta costura */
-            --text-dark: #1e1712;      /* Marrón café casi negro, muy editorial */
-            --accent-gold: #bfa36f;    /* Dorado mate/champán */
+            --bg-canvas: #fdfbf7;      /* Lienzo marfil extra claro y luminoso */
+            --text-dark: #1a1410;      /* Café profundo de atelier */
+            --accent-gold: #c2a26a;    /* Dorado champán de autor */
             --white: #ffffff;
-            --muted: rgba(30, 23, 18, 0.6);
+            --muted: rgba(26, 20, 16, 0.65);
+            --transition-fluid: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         html {
@@ -30,13 +31,13 @@
             box-sizing: border-box;
         }
 
-        /* TEXTURA DE LIENZO PERMANENTE */
+        /* TEXTURA DE LINO / TEXTIL LIGERO DE FONDO */
         body {
             background-color: var(--bg-canvas);
             background-image: 
-                linear-gradient(90deg, rgba(30, 23, 18, 0.02) 1px, transparent 1px),
-                linear-gradient(0deg, rgba(30, 23, 18, 0.02) 1px, transparent 1px);
-            background-size: 7px 7px;
+                linear-gradient(90deg, rgba(194, 162, 106, 0.03) 1px, transparent 1px),
+                linear-gradient(0deg, rgba(194, 162, 106, 0.03) 1px, transparent 1px);
+            background-size: 12px 12px;
             color: var(--text-dark);
             font-family: 'Montserrat', sans-serif;
             font-weight: 300;
@@ -44,402 +45,371 @@
             overflow-x: hidden;
         }
 
-        /* NAVEGACIÓN DESCENTRADA (Asimétrica y minimalista) */
+        h1, h2, h3, h4, .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 300;
+        }
+
+        /* HEADER EDITORIAL TRANSPARENTE */
         header {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 30px 4%;
+            top: 0; left: 0; width: 100%;
+            padding: 35px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 100;
-            background-color: rgba(245, 239, 229, 0.75);
+            background-color: rgba(253, 251, 247, 0.5);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(191, 163, 111, 0.1);
+            border-bottom: 1px solid rgba(194, 162, 106, 0.08);
+            transition: padding 0.4s ease, background-color 0.4s ease;
+        }
+
+        header.compacto {
+            padding: 18px 5%;
+            background-color: rgba(253, 251, 247, 0.85);
+            box-shadow: 0 10px 30px rgba(26, 20, 16, 0.01);
         }
 
         .logo {
-            font-family: 'Cormorant Garamond', serif;
             font-size: 28px;
-            letter-spacing: 5px;
+            letter-spacing: 6px;
             text-transform: uppercase;
-            font-weight: 400;
+            cursor: pointer;
+            transition: transform 0.3s ease;
         }
+        .logo:hover { color: var(--accent-gold); }
 
         nav a {
             text-decoration: none;
             color: var(--text-dark);
-            margin-left: 35px;
+            margin-left: 40px;
             font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 3px;
             position: relative;
-            opacity: 0.7;
-            transition: opacity 0.3s;
+            opacity: 0.6;
+            padding-bottom: 4px;
+            transition: var(--transition-fluid);
         }
+        nav a:hover { opacity: 1; color: var(--accent-gold); }
 
-        nav a:hover { opacity: 1; }
+        nav a::after {
+            content: ''; position: absolute; width: 100%; height: 1px; bottom: 0; left: 0;
+            background-color: var(--accent-gold); transform: scaleX(0); transform-origin: right;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        nav a:hover::after { transform: scaleX(1); transform-origin: left; }
 
-        /* HERO EDITORIAL ASIMÉTRICO (Adiós al bloque centrado aburrido) */
+        /* HERO ASIMÉTRICO CON VITRAL LUMINOSO Y DIFUMINADO */
         .hero-editorial {
-            min-height: 95vh;
+            min-height: 100vh;
             display: flex;
             align-items: center;
-            padding: 120px 4% 60px 4%;
+            padding: 140px 0 60px 0;
             position: relative;
         }
 
         .hero-wrapper {
             display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
-            gap: 40px;
+            grid-template-columns: 1.4fr 0.6fr;
+            gap: 20px;
             width: 100%;
-            align-items: center;
+        }
+
+        /* Bloque contenedor con difuminado perimetral absoluto */
+        .hero-bg-contraste {
+            grid-column: 1;
+            position: relative;
+            padding: 120px 10% 120px 7%;
+            z-index: 2;
+            animation: entradaSuave 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            
+            /* Difumina los bordes exteriores del contenedor para que se funda mágicamente con el marfil */
+            mask-image: radial-gradient(circle at 40% 50%, black 60%, transparent 95%);
+            -webkit-mask-image: radial-gradient(circle at 40% 50%, black 60%, transparent 95%);
+        }
+
+        /* Fondo del Vitral Claro (Champán, Perla, destellos Esmeralda y Oro) */
+        .hero-bg-contraste::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2;
+            background-image: 
+                /* Textura sutil de líneas de plomo translúcidas */
+                repeating-linear-gradient(135deg, rgba(194, 162, 106, 0.08) 0px, rgba(194, 162, 106, 0.08) 1px, transparent 1px, transparent 30px),
+                repeating-linear-gradient(45deg, rgba(194, 162, 106, 0.05) 0px, rgba(194, 162, 106, 0.05) 1px, transparent 1px, transparent 40px),
+                /* Gradientes de cristales claros reflejando la luz de joyería */
+                radial-gradient(circle at 20% 30%, rgba(217, 199, 159, 0.4) 0%, transparent 50%),
+                radial-gradient(circle at 70% 40%, rgba(32, 79, 50, 0.12) 0%, transparent 45%), /* Esmeralda muy suave */
+                radial-gradient(circle at 50% 80%, rgba(244, 238, 227, 0.9) 0%, transparent 60%),
+                linear-gradient(120deg, #fdfbf7 0%, #f4eee3 40%, #e8dec9 70%, #d4c5a1 100%);
+            background-size: cover;
+        }
+
+        /* Atenuación y desenfoque artístico del vitral para que los textos floten legibles */
+        .hero-bg-contraste::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            background-color: rgba(253, 251, 247, 0.25); /* Capa velada blanquecina */
+            z-index: -1;
         }
 
         .hero-text {
-            max-width: 650px;
-            z-index: 2;
+            max-width: 680px;
+            position: relative;
         }
 
         .hero-text span {
             font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 5px;
+            letter-spacing: 6px;
             color: var(--accent-gold);
             display: block;
-            margin-bottom: 15px;
+            margin-bottom: 25px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: entradaTexto 1s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.3s;
         }
 
         .hero-text h1 {
-            font-size: 64px;
-            line-height: 1.1;
-            font-weight: 300;
-            margin-bottom: 30px;
+            font-size: 66px;
+            line-height: 1.15;
+            margin-bottom: 35px;
+            color: var(--text-dark); /* Color oscuro para legibilidad impecable sobre vitral claro */
+            letter-spacing: -0.5px;
+            opacity: 0;
+            transform: translateY(40px);
+            animation: entradaTexto 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.5s;
         }
 
         .hero-text p {
             font-family: 'Cormorant Garamond', serif;
             font-style: italic;
             font-size: 24px;
-            color: var(--muted);
+            color: #332921;
             line-height: 1.6;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: entradaTexto 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.7s;
         }
 
-        /* DISEÑO DE CONTENEDOR FLUIDO */
         .container {
-            padding: 0 4%;
-            max-width: 1400px;
+            padding: 0 5%;
+            max-width: 1440px;
             margin: 0 auto;
-        }
-
-        /* TÍTULOS DE SECCIÓN DISRUPTIVOS */
-        .titulo-editorial {
-            font-size: 48px;
-            font-weight: 300;
-            letter-spacing: 2px;
-            margin-bottom: 80px;
             position: relative;
-            display: inline-block;
+            z-index: 5;
         }
 
-        .titulo-editorial::before {
-            content: "—";
-            color: var(--accent-gold);
-            margin-right: 15px;
-            font-weight: 300;
+        /* TÍTULOS EDITORIALES */
+        .titulo-editorial {
+            font-size: 56px;
+            letter-spacing: 1px;
+            margin-bottom: 100px;
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: var(--transition-fluid);
         }
 
-        /* REVELADO ELEGANTE */
+        .titulo-editorial.activo { opacity: 1; transform: translateY(0); }
+
+        .titulo-editorial::after {
+            content: ''; display: block; width: 0; height: 1px;
+            background-color: var(--accent-gold); margin-top: 15px;
+            transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .titulo-editorial.activo::after { width: 160px; }
+
+        /* EFECTO DE REVELADO EN SCROLL */
         .revelar {
             opacity: 0;
-            transform: translateY(50px);
-            transition: all 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+            transform: translateY(50px) scale(0.99);
+            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
+        .revelar.activo { opacity: 1; transform: translateY(0) scale(1); }
 
-        .revelar.activo {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* 1. SECCIÓN: GALERÍA DE AUTOR ASIMÉTRICA (Mosaico Humano) */
+        /* RETÍCULA DE GALERÍA */
         .mosaico-galeria {
             display: grid;
             grid-template-columns: repeat(12, 1fr);
-            gap: 40px;
-            margin-bottom: 150px;
-            align-items: center;
+            gap: 50px;
+            margin-bottom: 180px;
         }
 
         .mosaico-item {
             position: relative;
-            background-color: rgba(255, 255, 255, 0.3);
-            border: 1px solid rgba(191, 163, 111, 0.15);
-            padding: 15px;
-            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            background-color: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(194, 162, 106, 0.12);
+            padding: 18px;
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.8s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s;
         }
+
+        .mosaico-img-box { width: 100%; height: 100%; overflow: hidden; }
 
         .mosaico-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            background-color: rgba(0,0,0,0.03);
+            width: 100%; height: 100%; object-fit: cover; display: block;
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Posiciones caóticas pero estéticas (Rompe el orden de IA) */
-        .item-grande { grid-column: 1 / 7; height: 600px; }
-        .item-alto { grid-column: 8 / 13; height: 700px; margin-top: -80px; }
-        .item-ancho { grid-column: 3 / 10; height: 450px; margin-top: 40px; }
-
-        .meta-pieza {
-            margin-top: 15px;
+        .mosaico-item:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-gold);
+            box-shadow: 0 30px 60px rgba(194, 162, 106, 0.08);
         }
+        .mosaico-item:hover img { transform: scale(1.04); }
 
-        .meta-pieza h3 {
-            font-size: 22px;
-            font-weight: 400;
-            letter-spacing: 1px;
-        }
+        .item-grande { grid-column: 1 / 7; height: 650px; }
+        .item-alto { grid-column: 8 / 13; height: 750px; margin-top: -100px; }
+        .item-ancho { grid-column: 2 / 10; height: 480px; margin-top: 50px; }
 
-        .meta-pieza p {
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
-            font-size: 15px;
-            color: var(--muted);
-        }
+        .revelar-delay-1 { transition-delay: 0.15s; }
+        .revelar-delay-2 { transition-delay: 0.3s; }
 
-        /* 2. SECCIÓN: TIENDA / LOOKBOOK */
-        .lookbook-tienda {
-            margin-bottom: 150px;
-        }
+        .meta-pieza { margin-top: 20px; }
+        .meta-pieza h3 { font-size: 24px; margin-bottom: 5px; }
+        .meta-pieza p { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 16px; color: var(--muted); }
 
-        /* Layout Alternado Izquierda/Derecha para los productos */
+        /* SECCIÓN PRODUCTOS LOOKBOOK */
+        .lookbook-tienda { margin-bottom: 180px; }
+
         .producto-fila {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 100px;
-            align-items: center;
-            margin-bottom: 120px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 120px; align-items: center; margin-bottom: 140px;
         }
-
-        .producto-fila:nth-child(even) {
-            direction: rtl;
-        }
-
-        .producto-fila:nth-child(even) .info-producto {
-            direction: ltr;
-        }
+        .producto-fila:nth-child(even) { direction: rtl; }
+        .producto-fila:nth-child(even) .info-producto { direction: ltr; }
 
         .prod-img-box {
-            background-color: var(--white);
-            padding: 30px;
-            border: 1px solid rgba(191, 163, 111, 0.12);
-            position: relative;
+            background-color: var(--white); padding: 40px; border: 1px solid rgba(194, 162, 106, 0.08);
+            overflow: hidden; position: relative; transition: var(--transition-fluid);
         }
+
+        .prod-img-box::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
+            transform: skewX(-25deg); transition: 0.8s;
+        }
+        .producto-fila:hover .prod-img-box::before { left: 125%; }
 
         .prod-img-box img {
-            width: 100%;
-            height: 480px;
-            object-fit: cover;
-            display: block;
+            width: 100%; height: 520px; object-fit: cover; display: block;
+            transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
+        .producto-fila:hover .prod-img-box img { transform: scale(1.02); }
 
-        .info-producto {
-            max-width: 420px;
-        }
+        .info-producto { max-width: 440px; }
+        .info-producto h4 { font-size: 42px; line-height: 1.2; margin-bottom: 15px; }
+        .info-producto .precio { font-size: 16px; color: var(--accent-gold); margin-bottom: 35px; letter-spacing: 1px; }
 
-        .info-producto h4 {
-            font-size: 36px;
-            font-weight: 300;
-            margin-bottom: 15px;
-            letter-spacing: 1px;
-        }
-
-        .info-producto .precio {
-            font-size: 16px;
-            color: var(--accent-gold);
-            margin-bottom: 25px;
-            letter-spacing: 1px;
-        }
-
-        /* BOTÓN DE ALTA JOYERÍA */
         .btn-lineal {
-            background: none;
-            border: none;
-            border-bottom: 1px solid var(--text-dark);
-            color: var(--text-dark);
-            padding: 10px 0;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            font-size: 11px;
-            cursor: pointer;
-            display: inline-block;
-            transition: all 0.3s ease;
+            background: none; border: none; border-bottom: 1px solid var(--text-dark); color: var(--text-dark);
+            padding: 12px 0; text-transform: uppercase; letter-spacing: 3px; font-size: 11px; cursor: pointer;
+            display: inline-block; transition: var(--transition-fluid);
         }
+        .btn-lineal:hover { color: var(--accent-gold); border-bottom-color: var(--accent-gold); padding-left: 15px; }
 
-        .btn-lineal:hover {
-            color: var(--accent-gold);
-            border-bottom-color: var(--accent-gold);
-            padding-left: 10px;
-        }
-
-        /* 3. SECCIÓN: CITA ATELIER (Sofisticado, sin cajas oscuras genéricas) */
+        /* SECCIÓN ATELIER / CITAS */
         .seccion-atelier {
-            display: grid;
-            grid-template-columns: 0.8fr 1.2fr;
-            gap: 80px;
-            align-items: center;
-            margin-bottom: 150px;
-            background-color: rgba(255, 255, 255, 0.3);
-            border: 1px solid rgba(191, 163, 111, 0.15);
-            padding: 80px 6%;
+            display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 100px; align-items: center; margin-bottom: 180px;
+            background-color: rgba(255, 255, 255, 0.3); border: 1px solid rgba(194, 162, 106, 0.12);
+            padding: 100px 8%; position: relative;
         }
+        .atelier-info h2 { font-size: 48px; line-height: 1.2; margin-bottom: 25px; }
+        .atelier-info p { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 22px; color: var(--muted); margin-bottom: 40px; }
 
-        .atelier-info h2 {
-            font-size: 42px;
-            font-weight: 300;
-            line-height: 1.2;
-            margin-bottom: 20px;
-        }
-
-        .atelier-info p {
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
-            font-size: 20px;
-            color: var(--muted);
-            margin-bottom: 30px;
-        }
-
-        /* FOOTER DE AUTOR */
+        /* FOOTER */
         footer {
-            border-top: 1px solid rgba(191, 163, 111, 0.15);
-            padding: 60px 4%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            opacity: 0.6;
+            border-top: 1px solid rgba(194, 162, 106, 0.1); padding: 80px 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 11px; text-transform: uppercase; letter-spacing: 3px; opacity: 0.5;
         }
 
-        /* BOLSA DE COMPRAS FLOTANTE MÁS ARQUITECTÓNICA */
+        /* BOLSA DE COMPRAS INTERACTIVA */
         .bolsa-flotante {
-            position: fixed;
-            bottom: 40px;
-            right: 40px;
-            background-color: var(--text-dark);
-            color: var(--white);
-            padding: 18px 28px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            font-size: 11px;
-            cursor: pointer;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            transition: background-color 0.3s;
+            position: fixed; bottom: 50px; right: -200px; background-color: var(--text-dark); color: var(--white);
+            padding: 20px 32px; text-transform: uppercase; letter-spacing: 3px; font-size: 11px; cursor: pointer;
+            z-index: 1000; display: flex; align-items: center; gap: 18px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1); transition: right 0.6s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s;
         }
+        .bolsa-flotante.visible { right: 50px; }
+        .bolsa-flotante:hover { background-color: var(--accent-gold); }
+        .bolsa-contador { border-left: 1px solid rgba(255,255,255,0.25); padding-left: 15px; }
 
-        .bolsa-flotante:hover {
-            background-color: var(--accent-gold);
-        }
-
-        .bolsa-contador {
-            border-left: 1px solid rgba(255,255,255,0.3);
-            padding-left: 12px;
-            font-weight: 400;
-        }
-
-        /* SIDEBAR INTERNO DEL CARRITO */
+        /* SIDEBAR CARRITO */
         .carrito-sidebar {
-            position: fixed;
-            top: 0; right: -460px;
-            width: 100%;
-            max-width: 460px;
-            height: 100%;
-            background-color: var(--white);
-            box-shadow: -20px 0 50px rgba(0,0,0,0.03);
-            z-index: 2000;
-            transition: right 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-            display: flex;
-            flex-direction: column;
-            padding: 50px;
+            position: fixed; top: 0; right: -500px; width: 100%; max-width: 500px; height: 100%;
+            background-color: var(--white); box-shadow: -30px 0 70px rgba(26,20,16,0.04);
+            z-index: 2000; transition: right 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex; flex-direction: column; padding: 60px;
         }
-
         .carrito-sidebar.abierto { right: 0; }
-
         .carrito-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(191, 163, 111, 0.15);
-            padding-bottom: 25px;
-            margin-bottom: 30px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(194, 162, 106, 0.12); padding-bottom: 30px; margin-bottom: 40px;
         }
-
-        .carrito-header h2 {
-            font-size: 24px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 300;
-        }
-
-        .btn-cerrar {
-            background: none; border: none; font-size: 35px; cursor: pointer; font-weight: 100;
-        }
-
+        .carrito-header h2 { font-size: 26px; text-transform: uppercase; letter-spacing: 2px; }
+        .btn-cerrar { background: none; border: none; font-size: 40px; cursor: pointer; font-weight: 100; transition: transform 0.3s; }
+        .btn-cerrar:hover { transform: rotate(90deg); }
         .carrito-items { flex: 1; overflow-y: auto; }
-
         .item-carrito {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 20px 0; border-bottom: 1px solid rgba(0,0,0,0.03); font-size: 13px;
+            padding: 25px 0; border-bottom: 1px solid rgba(0,0,0,0.03); font-size: 13px;
         }
-
-        .btn-quitar {
-            background: none; border: none; color: #943d3d; cursor: pointer; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
-        }
-
-        .carrito-footer { border-top: 1px solid rgba(191, 163, 111, 0.15); padding-top: 30px; }
-
-        .carrito-total { display: flex; justify-content: space-between; font-size: 18px; margin-bottom: 30px; }
-
+        .btn-quitar { background: none; border: none; color: #a34141; cursor: pointer; font-size: 11px; text-transform: uppercase; opacity: 0.6; }
+        .btn-quitar:hover { opacity: 1; }
+        .carrito-footer { border-top: 1px solid rgba(194, 162, 106, 0.12); padding-top: 40px; }
+        .carrito-total { display: flex; justify-content: space-between; font-size: 20px; margin-bottom: 40px; }
         .btn-pagar {
-            background-color: var(--text-dark); color: var(--white); width: 100%; padding: 20px; border: none; text-transform: uppercase; letter-spacing: 3px; font-size: 11px; cursor: pointer; transition: background-color 0.3s;
+            background-color: var(--text-dark); color: var(--white); width: 100%; padding: 22px; border: none;
+            text-transform: uppercase; letter-spacing: 3px; font-size: 11px; cursor: pointer; transition: background-color 0.3s;
         }
-
         .btn-pagar:hover { background-color: var(--accent-gold); }
 
-        @keyframes fadeInSutil {
-            from { opacity: 0; transform: translateY(30px); }
+        /* ANIMACIONES BASES */
+        @keyframes entradaTexto {
+            from { opacity: 0; transform: translateY(25px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        @keyframes entradaSuave {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
 
-        /* RESPONSIVO PARA MÓVILES */
-        @media (max-width: 900px) {
+        /* DISEÑO RESPONSIVO MÓVIL */
+        @media (max-width: 992px) {
+            .hero-editorial { padding-top: 120px; }
             .hero-wrapper { grid-template-columns: 1fr; }
+            .hero-bg-contraste {
+                grid-column: 1; padding: 60px 5%;
+                mask-image: radial-gradient(circle at 50% 50%, black 70%, transparent 100%);
+                -webkit-mask-image: radial-gradient(circle at 50% 50%, black 70%, transparent 100%);
+            }
             .hero-text h1 { font-size: 42px; }
+            .hero-text p { font-size: 19px; }
             .mosaico-galeria { display: flex; flex-direction: column; gap: 60px; }
-            .mosaico-item { height: auto !important; margin-top: 0 !important; }
+            .mosaico-item { height: auto !important; margin-top: 0 !important; padding: 12px; }
             .mosaico-item img { height: 380px; }
             .producto-fila { grid-template-columns: 1fr; gap: 40px; direction: ltr !important; }
-            .seccion-atelier { grid-template-columns: 1fr; gap: 40px; padding: 40px 20px; }
-            header { padding: 20px 4%; }
+            .prod-img-box img { height: 380px; }
+            .seccion-atelier { grid-template-columns: 1fr; gap: 40px; padding: 60px 20px; }
+            header { padding: 25px 5%; }
             .logo { font-size: 22px; }
-            nav { display: none; } /* En móvil real se usaría un menú hamburguesa discreto */
-            .carrito-sidebar { max-width: 100%; }
+            nav { display: none; }
+            .carrito-sidebar { max-width: 100%; padding: 30px; }
+            .bolsa-flotante.visible { bottom: 20px; right: 20px; padding: 16px 24px; }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">Ambarino 1998</div>
+    <header id="main-header">
+        <div class="logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">Ambarino 1998</div>
         <nav>
             <a href="#galeria">Colecciones</a>
             <a href="#tienda">Ver Stock</a>
@@ -449,51 +419,60 @@
 
     <section class="hero-editorial">
         <div class="hero-wrapper">
-            <div class="hero-text">
-                <span>Atelier de Alta Joyería</span>
-                <h1>Modelamos metales, esculpimos historias.</h1>
-                <p>Piezas crudas, imperfectas y sofisticadas hechas completamente a mano en nuestro taller.</p>
+            <div class="hero-bg-contraste">
+                <div class="hero-text">
+                    <span>Atelier de Alta Joyería</span>
+                    <h1>Modelamos metales, esculpimos historias.</h1>
+                    <p>Piezas crudas, imperfectas y sofisticadas hechas completamente a mano en nuestro taller de autor.</p>
+                </div>
             </div>
-            <div></div> </div>
+            <div></div> 
+        </div>
     </section>
 
     <div class="container">
 
-        <section id="galeria" class="revelar">
-            <h2 class="titulo-editorial">Piezas de Autor</h2>
+        <section id="galeria">
+            <h2 class="titulo-editorial revelar">Piezas de Autor</h2>
             <div class="mosaico-galeria">
                 
-                <div class="mosaico-item item-grande">
-                    <img src="imagenes/anillo-verde.jpg" alt="Anillo Esmeralda">
+                <div class="mosaico-item item-grande revelar">
+                    <div class="mosaico-img-box">
+                        <img src="imagenes/anillo-verde.jpg" alt="Anillo Esmeralda">
+                    </div>
                     <div class="meta-pieza">
                         <h3>Anillo Esmeralda</h3>
-                        <p>Oro de 18k esculpido mediante fundición directa.</p>
+                        <p>Oro de 18k esculpido mediante fundición directa en crisol.</p>
                     </div>
                 </div>
 
-                <div class="mosaico-item item-alto">
-                    <img src="imagenes/amuleto-777.jpg" alt="Amuleto 777">
+                <div class="mosaico-item item-alto revelar revelar-delay-1">
+                    <div class="mosaico-img-box">
+                        <img src="imagenes/amuleto-777.jpg" alt="Amuleto 777">
+                    </div>
                     <div class="meta-pieza">
                         <h3>Amuleto "777"</h3>
-                        <p>Plata texturizada con alma rústica.</p>
+                        <p>Plata de ley batida y grabada con alma rústica.</p>
                     </div>
                 </div>
 
-                <div class="mosaico-item item-ancho">
-                    <img src="imagenes/brazalete.jpg" alt="Brazalete Minimalista">
+                <div class="mosaico-item item-ancho revelar revelar-delay-2">
+                    <div class="mosaico-img-box">
+                        <img src="imagenes/brazalete.jpg" alt="Brazalete Minimalista">
+                    </div>
                     <div class="meta-pieza">
                         <h3>Brazalete Geométrico</h3>
-                        <p>Líneas puras con acabado espejo pulido a mano.</p>
+                        <p>Líneas puras estructurales con acabado espejo pulido.</p>
                     </div>
                 </div>
 
             </div>
         </section>
 
-        <section id="tienda" class="lookbook-tienda revelar">
-            <h2 class="titulo-editorial">Disponibles en Taller</h2>
+        <section id="tienda" class="lookbook-tienda">
+            <h2 class="titulo-editorial revelar">Disponibles en Taller</h2>
             
-            <div class="producto-fila">
+            <div class="producto-fila revelar">
                 <div class="prod-img-box">
                     <img src="imagenes/cadena-basica.jpg" alt="Cadena Eslabón">
                 </div>
@@ -504,7 +483,7 @@
                 </div>
             </div>
 
-            <div class="producto-fila">
+            <div class="producto-fila revelar revelar-delay-1">
                 <div class="prod-img-box">
                     <img src="imagenes/topos-plata.jpg" alt="Topos Plata">
                 </div>
@@ -520,7 +499,7 @@
         <section id="contacto" class="seccion-atelier revelar">
             <div class="atelier-info">
                 <h2>Proyectos a medida & Alianzas</h2>
-                <p>Modelamos tus argollas de matrimonio o piezas personalizadas directamente contigo en una sesión de co-creación.</p>
+                <p>Modelamos tus argollas de matrimonio o piezas personales directamente contigo en una sesión íntima de co-creación.</p>
                 <button class="btn-lineal" onclick="window.open('https://wa.me/573219659337')">Agendar Cita en Taller</button>
             </div>
             <div></div>
@@ -528,7 +507,7 @@
 
     </div>
 
-    <div class="bolsa-flotante" onclick="toggleCarrito()">
+    <div class="bolsa-flotante" id="bolsa-interactiva" onclick="toggleCarrito()">
         <span>Bolsa</span>
         <span class="bolsa-contador" id="contador-productos">0</span>
     </div>
@@ -550,11 +529,31 @@
 
     <footer>
         <div>Ambarino 1998</div>
-        <div>BogotÁ, CO. © 2026</div>
+        <div>Bogotá, CO. © 2026</div>
     </footer>
 
     <script>
         let carrito = [];
+
+        // ESCUCHADOR DE SCROLL
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('main-header');
+            const bolsa = document.getElementById('bolsa-interactiva');
+            
+            if (window.scrollY > 50) {
+                header.classList.add('compacto');
+            } else {
+                header.classList.remove('compacto');
+            }
+
+            if (window.scrollY > 300) {
+                bolsa.classList.add('visible');
+            } else {
+                bolsa.classList.remove('visible');
+            }
+
+            revelarElementos();
+        });
 
         function toggleCarrito() {
             document.getElementById('sidebar-carrito').classList.toggle('abierto');
@@ -602,7 +601,7 @@
             });
 
             if(carrito.length === 0) {
-                listaItems.innerHTML = '<p style="text-align:center; opacity:0.4; padding-top:40px; font-size:12px; uppercase; letter-spacing:1px;">La bolsa está vacía.</p>';
+                listaItems.innerHTML = '<p style="text-align:center; opacity:0.4; padding-top:40px; font-size:12px; text-transform: uppercase; letter-spacing:1px;">La bolsa está vacía.</p>';
             }
 
             contador.innerText = totalUnidades;
@@ -621,16 +620,19 @@
             });
         }
 
+        // MOTOR DE REVELADO INERCIAL
         function revelarElementos() {
-            const elementos = document.querySelectorAll('.revelar');
+            const elementos = document.querySelectorAll('.revelar, .titulo-editorial');
             elementos.forEach(elemento => {
-                if (elemento.getBoundingClientRect().top < window.innerHeight - 60) {
+                const puntoDisparo = window.innerHeight - 80;
+                const topElemento = elemento.getBoundingClientRect().top;
+                
+                if (topElemento < puntoDisparo) {
                     elemento.classList.add('activo');
                 }
             });
         }
 
-        window.addEventListener('scroll', revelarElementos);
         window.addEventListener('DOMContentLoaded', revelarElementos);
     </script>
 </body>
