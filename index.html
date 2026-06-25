@@ -4,20 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ambarino 1998 | Tienda y Atelier de Joyería</title>
-    <!-- Incluimos la librería oficial de ePayco -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+    
     <script type="text/javascript" src="https://checkout.epayco.co/checkout.js"></script>
+    
     <style>
-        /* Paleta de colores basada en tu marca */
         :root {
-            --bg-canvas: #f6f0e8;      /* Color base de lienzo/marfil claro */
-            --text-dark: #3a2a1f;      /* Marrón café profundo para textos principales */
-            --accent-gold: #d4af37;    /* Dorado metálico pulido */
-            --brand-dark: #241a13;     /* Marrón oscuro místico para secciones de contraste */
+            --bg-canvas: #f7f2ea;      /* Lienzo marfil premium */
+            --text-dark: #2c2017;      /* Marrón profundo sutil, menos agresivo que el negro */
+            --accent-gold: #c5a059;    /* Dorado champán envejecido, más elegante */
+            --brand-dark: #1e150f;     /* Oscuro místico */
             --white: #ffffff;
-            --card-bg: #fffcf9;
+            --card-bg: rgba(255, 252, 249, 0.6); /* Tarjetas semi-translúcidas para integrarse al lienzo */
         }
 
-        /* ACTIVACIÓN DE DESPLAZAMIENTO SUAVE */
         html {
             scroll-behavior: smooth;
         }
@@ -26,66 +28,65 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Playfair Display', 'Georgia', serif;
         }
 
-        /* FONDO DE TEXTIL/LIENZO FINO DE ATELIER (Inspirado en entramados textiles de alta gama) */
+        /* TEXTURA DE LIENZO DE ATELIER MEJORADA */
         body {
             background-color: var(--bg-canvas);
-            /* Este triple gradiente simula los hilos verticales y horizontales de un lienzo fino */
             background-image: 
-                linear-gradient(90deg, rgba(58, 42, 31, 0.03) 1px, transparent 1px),
-                linear-gradient(0deg, rgba(58, 42, 31, 0.03) 1px, transparent 1px),
-                linear-gradient(45deg, rgba(255, 255, 255, 0.4) 25%, transparent 25%, transparent 75%, rgba(255, 255, 255, 0.4) 75%);
-            background-size: 6px 6px, 6px 6px, 12px 12px; /* Tamaño del patrón del hilo */
+                linear-gradient(90deg, rgba(44, 32, 23, 0.025) 1px, transparent 1px),
+                linear-gradient(0deg, rgba(44, 32, 23, 0.025) 1px, transparent 1px);
+            background-size: 8px 8px;
             color: var(--text-dark);
-            line-height: 1.6;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            line-height: 1.7;
             overflow-x: hidden;
+            letter-spacing: 0.5px;
         }
 
-        /* BARRA DE NAVEGACIÓN TRANSPARENTE / ESMERILADA */
+        h1, h2, h3, h4, .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 400;
+            color: var(--text-dark);
+        }
+
+        /* HEADER ESMERILADO ULTRA FLUIDO */
         header {
-            background-color: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(15px); /* Permite ver el entramado textil pasar por debajo */
-            -webkit-backdrop-filter: blur(15px);
-            padding: 20px;
+            background-color: rgba(247, 242, 234, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 25px 20px;
             text-align: center;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+            border-bottom: 1px solid rgba(197, 160, 89, 0.12);
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 4px 20px rgba(58, 42, 31, 0.03);
+            transition: all 0.4s ease;
         }
 
         .logo {
-            font-size: 26px;
-            letter-spacing: 6px;
+            font-size: 32px;
+            letter-spacing: 7px;
             text-transform: uppercase;
-            font-weight: 400;
-            transition: transform 0.4s ease;
             display: inline-block;
-            color: var(--text-dark);
-        }
-        
-        .logo:hover {
-            transform: scale(1.02);
         }
 
         nav {
-            margin-top: 15px;
+            margin-top: 12px;
         }
 
         nav a {
             text-decoration: none;
             color: var(--text-dark);
-            margin: 0 15px;
-            font-size: 12px;
+            margin: 0 18px;
+            font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 2.5px;
             position: relative;
-            padding-bottom: 4px;
-            transition: color 0.3s ease;
-            opacity: 0.8;
+            padding-bottom: 5px;
+            opacity: 0.7;
+            transition: opacity 0.3s ease, color 0.3s ease;
         }
 
         nav a::after {
@@ -94,11 +95,10 @@
             width: 100%;
             transform: scaleX(0);
             height: 1px;
-            bottom: 0;
-            left: 0;
+            bottom: 0; left: 0;
             background-color: var(--accent-gold);
             transform-origin: bottom right;
-            transition: transform 0.3s ease-out;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         nav a:hover {
@@ -111,93 +111,81 @@
             transform-origin: bottom left;
         }
 
-        /* BLOQUE DE CONTRASTE OSCURO: HERO */
+        /* HERO SECCIÓN EDITORIAL */
         .hero-section {
             background-color: var(--brand-dark);
             color: var(--bg-canvas);
-            padding: 100px 20px;
+            padding: 140px 20px;
             text-align: center;
-            margin-bottom: 60px;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+            margin-bottom: 80px;
             position: relative;
         }
 
-        /* Mantiene el entramado textil elegante incluso en la sección oscura */
         .hero-section::before {
             content: "";
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            opacity: 0.04;
-            pointer-events: none;
-            background-image: 
-                linear-gradient(90deg, #fff 1px, transparent 1px),
-                linear-gradient(0deg, #fff 1px, transparent 1px);
-            background-size: 6px 6px;
+            opacity: 0.03;
+            background-image: linear-gradient(90deg, #fff 1px, transparent 1px), linear-gradient(0deg, #fff 1px, transparent 1px);
+            background-size: 8px 8px;
         }
 
         .intro {
-            max-width: 700px;
+            max-width: 750px;
             margin: 0 auto;
             position: relative;
             z-index: 1;
-            animation: fadeInSutil 1.2s ease-out forwards;
+            animation: fadeInSutil 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
 
         .intro h1 {
-            font-size: 36px;
-            font-weight: 300;
-            margin-bottom: 20px;
-            letter-spacing: 2px;
+            font-size: 46px;
+            letter-spacing: 3px;
             color: var(--white);
-            text-transform: uppercase;
+            margin-bottom: 25px;
+            font-weight: 300;
         }
 
         .intro p {
+            font-family: 'Cormorant Garamond', serif;
             font-style: italic;
-            opacity: 0.85;
-            font-size: 18px;
-            max-width: 550px;
+            opacity: 0.8;
+            font-size: 22px;
+            max-width: 600px;
             margin: 0 auto;
+            line-height: 1.5;
         }
 
-        /* CONTENEDOR GENERAL */
         .container {
-            max-width: 1200px;
+            max-width: 1140px;
             margin: 0 auto;
             padding: 0 20px;
-            position: relative;
-            z-index: 2;
         }
 
         .section-title {
             text-align: center;
-            font-size: 24px;
-            letter-spacing: 5px;
+            font-size: 32px;
+            letter-spacing: 6px;
             text-transform: uppercase;
-            margin-bottom: 50px;
-            color: var(--text-dark);
-            position: relative;
+            margin-bottom: 60px;
+            font-weight: 300;
         }
 
         .section-title::after {
             content: '';
             display: block;
-            width: 50px;
+            width: 40px;
             height: 1px;
             background-color: var(--accent-gold);
-            margin: 15px auto 0;
+            margin: 18px auto 0;
             transition: width 0.4s ease;
         }
 
-        .section-title:hover::after {
-            width: 90px;
-        }
-
-        /* ANIMACIÓN AL HACER SCROLL */
+        /* REVELADO SUAVE CON EFECTO PARALLAX */
         .revelar {
             opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.215, 0.610, 0.355, 1);
+            transform: translateY(40px);
+            transition: all 1s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         .revelar.activo {
@@ -205,34 +193,34 @@
             transform: translateY(0);
         }
 
-        /* 1. SECCIÓN: GALERÍA DE AUTOR */
+        /* GALERÍA DE AUTOR ORGANIZADA */
         .galeria-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-bottom: 90px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 100px;
         }
 
         .galeria-item {
             background-color: var(--card-bg);
-            border: 1px solid rgba(212, 175, 55, 0.15);
+            border: 1px solid rgba(197, 160, 89, 0.15);
+            backdrop-filter: blur(5px);
             overflow: hidden;
             position: relative;
-            box-shadow: 0 4px 15px rgba(58, 42, 31, 0.03);
-            transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.6s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         .galeria-item:hover {
-            transform: translateY(-8px);
-            border-color: rgba(212, 175, 55, 0.5);
-            box-shadow: 0 15px 35px rgba(58, 42, 31, 0.09);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(44, 32, 23, 0.06);
+            border-color: rgba(197, 160, 89, 0.4);
         }
 
         .galeria-img-container {
             width: 100%;
-            height: 440px;
+            height: 460px;
             overflow: hidden;
-            background-color: #e3dad0;
+            background-color: rgba(44, 32, 23, 0.03);
         }
 
         .imagen-fluida {
@@ -240,265 +228,219 @@
             height: 100%;
             object-fit: cover;
             display: block;
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .galeria-item:hover .imagen-fluida {
+            transform: scale(1.04);
         }
 
         .capa-descripcion {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(36, 26, 19, 0.94);
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(30, 21, 15, 0.95);
             color: var(--bg-canvas);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 35px;
+            padding: 40px;
             text-align: center;
             opacity: 0;
-            transition: opacity 0.4s ease;
+            transition: opacity 0.5s ease;
             z-index: 2;
         }
 
         .capa-descripcion h3 {
-            font-size: 20px;
+            font-size: 26px;
             letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 12px;
             color: var(--white);
-            transform: translateY(20px);
-            transition: transform 0.4s ease;
+            margin-bottom: 15px;
         }
 
         .capa-descripcion p {
-            font-size: 14px;
+            font-family: 'Cormorant Garamond', serif;
             font-style: italic;
-            opacity: 0.85;
-            line-height: 1.7;
-            transform: translateY(20px);
-            transition: transform 0.4s ease 0.1s;
+            font-size: 16px;
+            opacity: 0.8;
+            line-height: 1.6;
         }
 
         @media (min-width: 769px) {
-            .galeria-item:hover .capa-descripcion {
-                opacity: 1;
-            }
-
-            .galeria-item:hover .capa-descripcion h3,
-            .galeria-item:hover .capa-descripcion p {
-                transform: translateY(0);
-            }
-
-            .galeria-item:hover .imagen-fluida {
-                transform: scale(1.05);
-            }
+            .galeria-item:hover .capa-descripcion { opacity: 1; }
         }
 
-        /* 2. SECCIÓN: TIENDA */
+        /* TIENDA EDITORIAL */
         .tienda-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 35px;
-            margin-bottom: 90px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            margin-bottom: 100px;
         }
 
         .producto-card {
-            background-color: var(--white);
-            border: 1px solid rgba(212, 175, 55, 0.15);
-            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(197, 160, 89, 0.12);
+            padding: 25px;
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            box-shadow: 0 4px 15px rgba(58, 42, 31, 0.03);
-            transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         .producto-card:hover {
-            transform: translateY(-5px);
+            background-color: var(--white);
             border-color: var(--accent-gold);
-            box-shadow: 0 10px 25px rgba(58, 42, 31, 0.06);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(44, 32, 23, 0.04);
         }
 
         .tienda-img-container {
             width: 100%;
-            height: 260px;
+            height: 280px;
             overflow: hidden;
-            margin-bottom: 20px;
-            background-color: #f5ece4;
+            margin-bottom: 25px;
+            background-color: rgba(44, 32, 23, 0.02);
         }
 
         .producto-card h4 {
-            font-size: 16px;
+            font-size: 20px;
             letter-spacing: 1px;
-            text-transform: uppercase;
-            font-weight: 400;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
         .precio {
-            font-weight: bold;
-            margin: 5px 0 15px 0;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+            margin-bottom: 20px;
             color: var(--accent-gold);
-            font-size: 15px;
+            font-size: 14px;
             letter-spacing: 1px;
         }
 
+        /* BOTÓN DE COMPRA REFINADO */
         .btn-comprar {
-            background-color: var(--brand-dark);
-            color: var(--white);
-            padding: 14px;
-            border: none;
+            background-color: transparent;
+            color: var(--text-dark);
+            padding: 15px;
+            border: 1px solid var(--text-dark);
             width: 100%;
             text-transform: uppercase;
             letter-spacing: 2px;
-            font-size: 11px;
+            font-size: 10px;
+            font-weight: 400;
             cursor: pointer;
-            position: relative;
-            z-index: 1;
-            transition: color 0.4s ease;
+            transition: all 0.4s ease;
         }
 
-        .btn-comprar::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 0; height: 100%;
-            background-color: var(--accent-gold);
-            transition: width 0.4s ease;
-            z-index: -1;
+        .producto-card:hover .btn-comprar {
+            background-color: var(--brand-dark);
+            color: var(--white);
+            border-color: var(--brand-dark);
         }
 
-        .btn-comprar:hover {
-            color: var(--brand-dark);
-            font-weight: bold;
-        }
-
-        .btn-comprar:hover::before {
-            width: 100%;
-        }
-
-        /* SECCIÓN CONTACTO */
+        /* SECCIÓN CONTACTO ATELIER */
         .cta-bodas {
             background-color: var(--brand-dark);
             color: var(--bg-canvas);
             text-align: center;
-            padding: 80px 30px;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            margin-bottom: 90px;
-            box-shadow: 0 15px 40px rgba(41, 30, 22, 0.15);
+            padding: 100px 40px;
+            margin-bottom: 100px;
             position: relative;
-            overflow: hidden;
-        }
-
-        .cta-bodas::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            opacity: 0.04;
-            pointer-events: none;
-            background-image: 
-                linear-gradient(90deg, #fff 1px, transparent 1px),
-                linear-gradient(0deg, #fff 1px, transparent 1px);
-            background-size: 6px 6px;
-        }
-
-        .cta-bodas h2, .cta-bodas p, .cta-bodas a {
-            position: relative;
-            z-index: 1;
         }
 
         .cta-bodas h2 {
             color: var(--white);
+            font-size: 36px;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            font-weight: 300;
         }
 
+        .cta-bodas p {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 20px;
+            opacity: 0.8;
+        }
+
+        /* BOTÓN WHATSAPP MINIMALISTA */
         .btn-whatsapp {
             display: inline-block;
-            background-color: var(--accent-gold);
-            color: var(--brand-dark);
-            padding: 16px 36px;
+            background-color: transparent;
+            color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
+            padding: 18px 42px;
             text-decoration: none;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 12px;
-            margin-top: 25px;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(214, 175, 87, 0.2);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+            letter-spacing: 2.5px;
+            font-size: 11px;
+            margin-top: 35px;
+            transition: all 0.4s ease;
         }
 
         .btn-whatsapp:hover {
-            transform: scale(1.04);
-            background-color: var(--white);
+            background-color: var(--accent-gold);
             color: var(--brand-dark);
-            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 25px rgba(197, 160, 89, 0.2);
         }
 
         footer {
             text-align: center;
-            padding: 40px;
-            font-size: 11px;
-            letter-spacing: 1px;
-            opacity: 0.6;
-            background-color: var(--white);
-            border-top: 1px solid rgba(58, 42, 31, 0.05);
-            position: relative;
-            z-index: 2;
+            padding: 50px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.5;
+            border-top: 1px solid rgba(44, 32, 23, 0.05);
         }
 
-        /* CARRITO DE COMPRAS FLOTANTE */
+        /* CARRITO FLOTANTE DISCRETO */
         .carrito-flotante {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            bottom: 40px;
+            right: 40px;
             background-color: var(--brand-dark);
             color: var(--white);
-            padding: 15px 22px;
-            border-radius: 30px;
-            border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 14px 24px;
+            border-radius: 0; /* Bordes rectos para un look más arquitectónico y de autor */
+            border: 1px solid rgba(197, 160, 89, 0.3);
             cursor: pointer;
             z-index: 1000;
-            box-shadow: 0 8px 25px rgba(41, 30, 22, 0.4);
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 13px;
-            letter-spacing: 1px;
+            gap: 15px;
+            font-size: 11px;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .carrito-flotante:hover {
-            transform: scale(1.05);
             background-color: var(--accent-gold);
-            border-color: var(--white);
+            color: var(--brand-dark);
         }
 
         .contador-carrito {
             background-color: var(--white);
             color: var(--brand-dark);
-            font-weight: bold;
-            border-radius: 50%;
-            padding: 2px 9px;
-            font-size: 12px;
+            font-weight: 500;
+            padding: 2px 8px;
+            font-size: 11px;
         }
 
-        /* PANEL SIDEBAR DEL CARRITO */
+        /* SIDEBAR DEL CARRITO */
         .carrito-sidebar {
             position: fixed;
-            top: 0;
-            right: -420px;
+            top: 0; right: -440px;
             width: 100%;
-            max-width: 420px;
+            max-width: 440px;
             height: 100%;
             background-color: var(--white);
-            box-shadow: -10px 0 35px rgba(41, 30, 22, 0.15);
+            box-shadow: -15px 0 40px rgba(0,0,0,0.05);
             z-index: 2000;
-            transition: right 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: right 0.5s cubic-bezier(0.25, 1, 0.5, 1);
             display: flex;
             flex-direction: column;
-            padding: 35px;
+            padding: 40px;
         }
 
         .carrito-sidebar.abierto {
@@ -509,157 +451,108 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-            padding-bottom: 18px;
-            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(197, 160, 89, 0.15);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
         }
 
         .carrito-header h2 {
-            font-size: 18px;
+            font-size: 24px;
             text-transform: uppercase;
             letter-spacing: 2px;
-            color: var(--text-dark);
         }
 
         .btn-cerrar-carrito {
             background: none;
             border: none;
-            font-size: 28px;
+            font-size: 32px;
             cursor: pointer;
-            color: var(--text-dark);
-            opacity: 0.7;
-            transition: opacity 0.2s;
+            font-weight: 200;
+            opacity: 0.5;
         }
 
-        .btn-cerrar-carrito:hover {
-            opacity: 1;
-        }
-
-        .carrito-items {
-            flex: 1;
-            overflow-y: auto;
-            margin-bottom: 25px;
-        }
+        .btn-cerrar-carrito:hover { opacity: 1; }
 
         .item-carrito {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(58, 42, 31, 0.06);
-            font-size: 14px;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.04);
+            font-size: 13px;
         }
 
         .btn-eliminar-item {
             background: none;
             border: none;
-            color: #b32424;
+            color: #a03333;
             cursor: pointer;
-            font-size: 12px;
-            margin-left: 10px;
+            font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            opacity: 0.8;
+            opacity: 0.7;
         }
 
-        .btn-eliminar-item:hover {
-            opacity: 1;
-            text-decoration: underline;
-        }
+        .btn-eliminar-item:hover { opacity: 1; text-decoration: underline; }
 
         .carrito-footer {
-            border-top: 1px solid rgba(212, 175, 55, 0.2);
-            padding-top: 25px;
+            border-top: 1px solid rgba(197, 160, 89, 0.15);
+            padding-top: 30px;
         }
 
         .carrito-total {
             display: flex;
             justify-content: space-between;
-            font-size: 19px;
-            font-weight: bold;
-            margin-bottom: 25px;
-            color: var(--text-dark);
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 30px;
         }
 
         .btn-pagar-total {
-            background-color: var(--accent-gold);
-            color: var(--brand-dark);
+            background-color: var(--brand-dark);
+            color: var(--white);
             width: 100%;
-            padding: 16px;
+            padding: 18px;
             border: none;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: bold;
+            letter-spacing: 2.5px;
+            font-size: 11px;
             cursor: pointer;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: background-color 0.3s ease;
         }
 
         .btn-pagar-total:hover {
-            background-color: var(--brand-dark);
-            color: var(--white);
+            background-color: var(--accent-gold);
+            color: var(--brand-dark);
         }
 
         @keyframes fadeInSutil {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(25px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* RESPONSIVO / OPTIMIZACIÓN PARA CELULAR */
+        /* CELULARES */
         @media (max-width: 768px) {
-            .galeria-grid, .tienda-grid {
-                grid-template-columns: 1fr;
-                gap: 35px;
-            }
-
-            .hero-section {
-                padding: 70px 20px;
-            }
-
-            .intro h1 {
-                font-size: 28px;
-            }
-
-            .intro p {
-                font-size: 16px;
-            }
-
-            .galeria-img-container {
-                height: 360px;
-            }
-
+            .galeria-grid, .tienda-grid { grid-template-columns: 1fr; }
+            .intro h1 { font-size: 32px; }
+            .logo { font-size: 26px; }
+            
             .capa-descripcion {
                 position: relative;
                 opacity: 1;
-                background-color: var(--card-bg);
+                background-color: var(--white);
                 color: var(--text-dark);
-                padding: 25px 20px;
+                padding: 30px 20px;
                 height: auto;
-                border-top: 1px solid rgba(212, 175, 55, 0.15);
+                border-top: 1px solid rgba(197, 160, 89, 0.15);
             }
-
-            .capa-descripcion h3 {
-                transform: none;
-                font-size: 18px;
-                color: var(--text-dark);
-                margin-bottom: 6px;
-            }
-
-            .capa-descripcion p {
-                transform: none;
-                font-size: 13px;
-                color: var(--text-dark);
-                opacity: 0.85;
-            }
-
-            .carrito-sidebar {
-                max-width: 100%;
-            }
+            .capa-descripcion h3 { color: var(--text-dark); font-size: 22px; }
+            .carrito-sidebar { max-width: 100%; }
         }
     </style>
 </head>
 <body>
 
-    <!-- MENÚ TRANSMARENTE / ESMERILADO -->
     <header>
         <div class="logo">Ambarino 1998</div>
         <nav>
@@ -669,7 +562,6 @@
         </nav>
     </header>
 
-    <!-- BLOQUE HERO OSCURO -->
     <section class="hero-section">
         <div class="intro">
             <h1>Joyería de autor hecha a mano</h1>
@@ -679,9 +571,8 @@
 
     <div class="container">
 
-        <!-- SECCIÓN 1: GALERÍA DE AUTOR -->
         <section id="galeria" class="revelar">
-            <h2 class="section-title">Piezas de Autor / Galería</h2>
+            <h2 class="section-title">Piezas de Autor</h2>
             <div class="galeria-grid">
                 
                 <div class="galeria-item">
@@ -717,14 +608,13 @@
             </div>
         </section>
 
-        <!-- SECCIÓN 2: LA TIENDA -->
         <section id="tienda" class="revelar">
-            <h2 class="section-title">La Tienda / Stock Disponible</h2>
+            <h2 class="section-title">Stock Disponible</h2>
             <div class="tienda-grid">
                 
                 <div class="producto-card">
                     <div class="tienda-img-container">
-                        <img src="imagenes/cadena-basica.jpg" alt="Cadena Eslabón Clásica" class="imagen-fluida">
+                        <img src="imagenes/cadena-basica.jpg" alt="Cadena Eslabón" class="imagen-fluida">
                     </div>
                     <h4>Cadena Eslabón Clásica</h4>
                     <p class="precio">$120.000 COP</p>
@@ -742,7 +632,7 @@
 
                 <div class="producto-card">
                     <div class="tienda-img-container">
-                        <img src="imagenes/anillo-liso.jpg" alt="Anillo Ajustable Básico" class="imagen-fluida">
+                        <img src="imagenes/anillo-liso.jpg" alt="Anillo Ajustable" class="imagen-fluida">
                     </div>
                     <h4>Anillo Liso Ajustable</h4>
                     <p class="precio">$85.000 COP</p>
@@ -752,18 +642,16 @@
             </div>
         </section>
 
-        <!-- SECCIÓN 3: CONTACTO -->
         <section id="contacto" class="cta-bodas revelar">
-            <h2>¿Buscas algo único o Argollas de Matrimonio?</h2>
-            <p>Agenda una sesión personalizada para diseñar tus joyas ideales o argollas de boda desde cero.</p>
-            <a href="https://wa.me/573219659337?text=Hola%20Ambarino,%20me%20interesa%20agendar%20una%20asesoría%20para%20un%20diseño%20personalizado" class="btn-whatsapp" target="_blank">Contactar por WhatsApp</a>
+            <h2>¿Buscas argollas de matrimonio?</h2>
+            <p>Agenda una sesión personalizada en nuestro taller para diseñar tus piezas ideales desde cero.</p>
+            <a href="https://wa.me/573219659337?text=Hola%20Ambarino,%20me%20interesa%20agendar%20una%20asesoría" class="btn-whatsapp" target="_blank">Contactar Atelier</a>
         </section>
 
     </div>
 
-    <!-- ELEMENTOS DEL CARRITO DE COMPRAS -->
     <div class="carrito-flotante" onclick="toggleCarrito()">
-        <span>🛒 Carrito</span>
+        <span>🛒 Bolsa</span>
         <span class="contador-carrito" id="contador-productos">0</span>
     </div>
 
@@ -772,9 +660,7 @@
             <h2>Tu Pedido</h2>
             <button class="btn-cerrar-carrito" onclick="toggleCarrito()">&times;</button>
         </div>
-        <div class="carrito-items" id="lista-items-carrito">
-            <!-- Los productos agregados aparecerán aquí dinámicamente -->
-        </div>
+        <div class="carrito-items" id="lista-items-carrito"></div>
         <div class="carrito-footer">
             <div class="carrito-total">
                 <span>Total:</span>
@@ -785,11 +671,10 @@
     </div>
 
     <footer>
-        <p>&copy; 2026 Ambarino 1998 | Diseñado con dedicación.</p>
+        <p>&copy; 2026 Ambarino 1998 | El arte de moldear historias.</p>
     </footer>
 
     <script>
-        // LÓGICA DEL CARRITO EN JAVASCRIPT
         let carrito = [];
 
         function toggleCarrito() {
@@ -801,9 +686,7 @@
             if (itemExistente) {
                 itemExistente.cantidad += 1;
             } else {
-                carrito.push({ nombre: nombre, precio: precio, quantity: 1 });
-                // Corregido propiedad interna de cantidad para consistencia
-                carrito[carrito.length-1].cantidad = 1;
+                carrito.push({ nombre: nombre, precio: precio, cantidad: 1 });
             }
             actualizarInterfazCarrito();
             document.getElementById('sidebar-carrito').classList.add('abierto');
@@ -824,8 +707,8 @@
             const totalTexto = document.getElementById('precio-total-carrito');
             
             listaItems.innerHTML = '';
-            
             let totalUnidades = 0;
+            
             carrito.forEach(item => {
                 totalUnidades += item.cantidad;
                 listaItems.innerHTML += `
@@ -840,54 +723,39 @@
             });
 
             if(carrito.length === 0) {
-                listaItems.innerHTML = '<p style="text-align:center; opacity:0.6; padding-top:20px;">Tu carrito está vacío.</p>';
+                listaItems.innerHTML = '<p style="text-align:center; opacity:0.4; padding-top:30px; font-size:12px;">Tu bolsa está vacía.</p>';
             }
 
             contador.innerText = totalUnidades;
             totalTexto.innerText = `$${calcularTotal().toLocaleString('es-CO')} COP`;
         }
 
-        // INTEGRACIÓN OFICIAL DEL CHECKOUT ABIERTO DE EPAYCO
         function procesarPagoEpayco() {
             if (carrito.length === 0) {
-                alert("Tu carrito está vacío. Agrega algún producto para poder pagar.");
+                alert("Tu bolsa está vacía.");
                 return;
             }
-
             const totalFactura = calcularTotal();
             const descripcionPedido = carrito.map(item => `${item.nombre} (x${item.cantidad})`).join(', ');
 
             var handler = ePayco.checkout.configure({
-                key: 'TU_LLAVE_PUBLICA_DE_EPAYCO', // <--- Reemplazar cuando crees tu cuenta
-                test: true // <--- Cambiar a false cuando vayas a recibir dinero real
+                key: 'TU_LLAVE_PUBLICA_DE_EPAYCO',
+                test: true
             });
 
-            var data = {
+            handler.open({
                 name: "Ambarino 1998",
                 description: descripcionPedido,
                 currency: "cop",
                 amount: totalFactura.toString(),
-                tax_base: "0",
-                tax: "0",
-                country: "co",
-                lang: "es",
-                external: "false",
-                url_confirmation: "", 
-                url_response: ""
-            };
-
-            handler.open(data);
+                tax_base: "0", tax: "0", country: "co", lang: "es", external: "false"
+            });
         }
 
-        // EFECTO REVELAR CON SCROLL
         function revelarElementos() {
             const elementos = document.querySelectorAll('.revelar');
             elementos.forEach(elemento => {
-                const ventanaTop = window.innerHeight;
-                const elementoTop = elemento.getBoundingClientRect().top;
-                const margenRevelado = 100;
-                
-                if (elementoTop < ventanaTop - margenRevelado) {
+                if (elemento.getBoundingClientRect().top < window.innerHeight - 80) {
                     elemento.classList.add('activo');
                 }
             });
@@ -896,6 +764,5 @@
         window.addEventListener('scroll', revelarElementos);
         window.addEventListener('DOMContentLoaded', revelarElementos);
     </script>
-
 </body>
 </html>
