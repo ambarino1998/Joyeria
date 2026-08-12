@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colección | Ambarino 1998</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <script type="text/javascript" src="https://checkout.epayco.co/checkout.js"></script>
+    
+    <style>
+        /* Reutilizamos los mismos estilos base para mantener la coherencia visual */
+        :root {
+            --bg-marfil: #fdfbf7; --color-cafe: #1a1410; --color-dorado: #c2a26a; --blanco-puro: #ffffff;
+            --texto-suave: rgba(26, 20, 16, 0.65); --transicion: all 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-marfil); }
+        ::-webkit-scrollbar-thumb { background: var(--color-dorado); border-radius: 10px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: var(--bg-marfil); background-image: linear-gradient(90deg, rgba(194, 162, 106, 0.03) 1px, transparent 1px), linear-gradient(0deg, rgba(194, 162, 106, 0.03) 1px, transparent 1px); background-size: 15px 15px; color: var(--color-cafe); font-family: 'Montserrat', sans-serif; font-weight: 300; line-height: 1.8; overflow-x: hidden; }
+        h1, h2, h3, h4, .brand-logo { font-family: 'Cormorant Garamond', serif; font-weight: 300; }
+        
+        /* Navegación */
+        header { position: fixed; top: 0; left: 0; width: 100%; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; z-index: 100; background-color: rgba(253, 251, 247, 0.95); box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03); }
+        .brand-logo { font-size: 24px; letter-spacing: 5px; text-transform: uppercase; cursor: pointer; text-decoration: none; color: var(--color-cafe); }
+        nav a { text-decoration: none; color: var(--color-cafe); margin-left: 40px; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.7; transition: var(--transicion); }
+        nav a:hover, nav a.activo { opacity: 1; color: var(--color-dorado); }
+
+        /* Contenedor principal de la tienda */
+        .tienda-header { padding: 140px 5% 40px 5%; text-align: center; }
+        .tienda-header h1 { font-size: 48px; margin-bottom: 10px; }
+        .container { padding: 0 5%; max-width: 1400px; margin: 0 auto; }
+        
+        /* Filtros */
+        .filtro-container { display: flex; justify-content: center; gap: 30px; margin-bottom: 60px; border-bottom: 1px solid rgba(194, 162, 106, 0.2); padding-bottom: 15px; flex-wrap: wrap; }
+        .btn-categoria { background: none; border: none; font-family: 'Montserrat', sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--texto-suave); cursor: pointer; padding: 10px 5px; position: relative; transition: color 0.3s ease; }
+        .btn-categoria.active, .btn-categoria:hover { color: var(--color-cafe); font-weight: 500; }
+        .btn-categoria.active::after { content: ''; position: absolute; bottom: -16px; left: 0; width: 100%; height: 2px; background-color: var(--color-dorado); }
+
+        /* Grilla de productos */
+        .grid-productos { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 40px; margin-bottom: 120px; }
+        .tarjeta-producto { background-color: transparent; position: relative; display: flex; flex-direction: column; transition: var(--transicion); cursor: pointer; }
+        .tarjeta-producto:hover .imagen-wrapper img { transform: scale(1.04); }
+        .badge-etiqueta { position: absolute; top: 15px; left: 15px; font-size: 8px; text-transform: uppercase; letter-spacing: 2px; background-color: var(--bg-marfil); padding: 5px 12px; z-index: 2; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .imagen-wrapper { width: 100%; height: 350px; overflow: hidden; margin-bottom: 20px; background-color: #f2ece4; }
+        .imagen-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        .info-producto h3 { font-size: 20px; margin-bottom: 4px; }
+        .info-producto .materiales { font-size: 10px; color: var(--texto-suave); margin-bottom: 15px; display: block; text-transform: uppercase; letter-spacing: 1px; }
+        .info-producto .precio-tag { font-size: 14px; color: var(--color-dorado); margin-bottom: 15px; }
+        .btn-agregar { background: none; border: none; border-bottom: 1px solid rgba(26, 20, 16, 0.2); color: var(--color-cafe); padding: 8px 0; text-transform: uppercase; letter-spacing: 1.5px; font-size: 10px; cursor: pointer; width: 100%; text-align: left; transition: 0.3s; }
+        .btn-agregar:hover { color: var(--color-dorado); border-bottom-color: var(--color-dorado); padding-left: 8px; }
+
+        /* Carrito (Igual que en index) */
+        .cart-trigger { position: fixed; bottom: 30px; right: 30px; background-color: var(--color-cafe); color: var(--blanco-puro); padding: 16px 24px; text-transform: uppercase; letter-spacing: 2px; font-size: 10px; cursor: pointer; z-index: 1000; display: flex; align-items: center; gap: 12px; box-shadow: 0 15px 30px rgba(0,0,0,0.15); transition: 0.4s; }
+        .cart-trigger:hover { background-color: var(--color-dorado); transform: translateY(-3px); }
+        .cart-count { border-left: 1px solid rgba(255,255,255,0.3); padding-left: 12px; }
+        .drawer-carrito { position: fixed; top: 0; right: -100%; width: 100%; max-width: 420px; height: 100%; background-color: var(--blanco-puro); box-shadow: -10px 0 40px rgba(0,0,0,0.08); z-index: 2000; transition: right 0.6s cubic-bezier(0.25, 1, 0.5, 1); display: flex; flex-direction: column; padding: 40px; }
+        .drawer-carrito.is-open { right: 0; }
+        .drawer-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 20px; margin-bottom: 20px; }
+        .btn-close { background: none; border: none; font-size: 28px; cursor: pointer; color: var(--texto-suave); }
+        .cart-body { flex: 1; overflow-y: auto; padding-right: 10px; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #f9f9f9; font-size: 12px; }
+        .btn-remove { background: none; border: none; color: #a34141; cursor: pointer; font-size: 9px; text-transform: uppercase; text-decoration: underline; margin-top: 5px;}
+        .cart-footer { padding-top: 20px; }
+        .cart-total { display: flex; justify-content: space-between; font-size: 16px; margin-bottom: 20px; font-family: 'Cormorant Garamond', serif; font-weight: 500; }
+        .btn-checkout { background-color: var(--color-cafe); color: var(--blanco-puro); width: 100%; padding: 15px; border: none; text-transform: uppercase; letter-spacing: 2px; font-size: 10px; cursor: pointer; transition: 0.3s; }
+        .btn-checkout:hover { background-color: var(--color-dorado); }
+        
+        footer { border-top: 1px solid rgba(194, 162, 106, 0.2); padding: 50px 5%; display: flex; justify-content: space-between; align-items: center; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: var(--texto-suave); }
+        @media (max-width: 768px) { nav { display: none; } .filtro-container { justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 5px;} }
+    </style>
+</head>
+<body>
+
+    <header id="site-header">
+        <a href="index.html" class="brand-logo">Ambarino 1998</a>
+        <nav>
+            <a href="index.html">Inicio</a>
+            <a href="coleccion.html" class="activo">Colección</a>
+            <a href="index.html#taller">Atelier</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="tienda-header">
+            <h1>Archivo de Piezas</h1>
+            <p style="font-style: italic; color: var(--texto-suave);">Catálogo completo de diseño.</p>
+        </div>
+
+        <div class="container">
+            <div class="filtro-container">
+                <button class="btn-categoria active" data-filter="all">Todas</button>
+                <button class="btn-categoria" data-filter="anillos">Anillos</button>
+                <button class="btn-categoria" data-filter="cuello">Cadenas</button>
+                <button class="btn-categoria" data-filter="oreja">Aretes</button>
+                <button class="btn-categoria" data-filter="muneca">Brazaletes</button>
+            </div>
+
+            <div class="grid-productos" id="galeria-productos">
+                
+                <!-- PRODUCTO 1 -->
+                <article class="tarjeta-producto" data-category="muneca">
+                    <span class="badge-etiqueta">Edición Especial</span>
+                    <div class="imagen-wrapper"><img src="image_e71ec0.jpg" alt="Brazalete 777"></div>
+                    <div class="info-producto">
+                        <h3>Brazalete 777</h3>
+                        <span class="materiales">Plata 925 & Acrílico</span>
+                        <div class="precio-tag">$280.000 COP</div>
+                        <button class="btn-agregar" onclick="addToCart('brz-777', 'Brazalete 777', 280000)">Agregar a la Bolsa</button>
+                    </div>
+                </article>
+
+                <!-- PRODUCTO 2 -->
+                <article class="tarjeta-producto" data-category="anillos">
+                    <div class="imagen-wrapper"><img src="imagenes/anillo-sello.jpg" alt="Anillo Sello"></div>
+                    <div class="info-producto">
+                        <h3>Anillo Sello de Autor</h3>
+                        <span class="materiales">Oro 18k / Esmeralda</span>
+                        <div class="precio-tag">$450.000 COP</div>
+                        <button class="btn-agregar" onclick="addToCart('an-sello', 'Anillo Sello', 450000)">Agregar a la Bolsa</button>
+                    </div>
+                </article>
+
+                <!-- PRODUCTO 3 -->
+                <article class="tarjeta-producto" data-category="cuello">
+                    <div class="imagen-wrapper"><img src="imagenes/gargantilla.jpg" alt="Gargantilla"></div>
+                    <div class="info-producto">
+                        <h3>Gargantilla Industrial</h3>
+                        <span class="materiales">Plata Ley 925</span>
+                        <div class="precio-tag">$120.000 COP</div>
+                        <button class="btn-agregar" onclick="addToCart('cl-ind', 'Gargantilla Industrial', 120000)">Agregar a la Bolsa</button>
+                    </div>
+                </article>
+
+                <!-- AQUÍ PUEDES AGREGAR LOS OTROS 12 PRODUCTOS HACIA ABAJO -->
+                <!-- Solo copia y pega la estructura <article>...</article> y cambia los datos -->
+
+            </div>
+        </div>
+    </main>
+
+    <!-- UI Carrito -->
+    <div class="cart-trigger" onclick="toggleCart()">
+        <span>Mi Bolsa</span>
+        <span class="cart-count" id="cart-counter">0</span>
+    </div>
+
+    <aside class="drawer-carrito" id="cart-drawer">
+        <div class="drawer-header">
+            <h2 style="font-size: 24px;">Tu Selección</h2>
+            <button class="btn-close" onclick="toggleCart()">&times;</button>
+        </div>
+        <div class="cart-body" id="cart-items-container"></div>
+        <div class="cart-footer">
+            <div class="cart-total"><span>Subtotal</span><span id="cart-total-price">$0 COP</span></div>
+            <button class="btn-checkout" onclick="initCheckout()">Finalizar Compra</button>
+        </div>
+    </aside>
+
+    <footer>
+        <div>Ambarino 1998 — Estudio de Joyería</div>
+        <div>Hecho en Bogotá, CO. © 2024</div>
+    </footer>
+
+    <script>
+        // Memoria del carrito conectada a Local Storage
+        let cart = JSON.parse(localStorage.getItem('ambarino_cart')) || [];
+
+        document.addEventListener('DOMContentLoaded', () => { renderCart(); });
+
+        // Filtros
+        const filterBtns = document.querySelectorAll('.btn-categoria');
+        const products = document.querySelectorAll('.tarjeta-producto');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                const filterValue = e.target.getAttribute('data-filter');
+                products.forEach(prod => {
+                    if (filterValue === 'all' || prod.getAttribute('data-category') === filterValue) {
+                        prod.style.display = 'flex';
+                    } else {
+                        prod.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Funciones del Carrito
+        function toggleCart() { document.getElementById('cart-drawer').classList.toggle('is-open'); }
+
+        function addToCart(id, name, price) {
+            const existingItemIndex = cart.findIndex(item => item.id === id);
+            if (existingItemIndex > -1) {
+                cart[existingItemIndex].quantity += 1;
+            } else {
+                cart.push({ id, name, price, quantity: 1 });
+            }
+            // Guardar en la memoria del navegador
+            localStorage.setItem('ambarino_cart', JSON.stringify(cart));
+            renderCart();
+            document.getElementById('cart-drawer').classList.add('is-open');
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            localStorage.setItem('ambarino_cart', JSON.stringify(cart));
+            renderCart();
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-items-container');
+            const counter = document.getElementById('cart-counter');
+            const totalUI = document.getElementById('cart-total-price');
+            
+            container.innerHTML = '';
+            if (cart.length === 0) {
+                container.innerHTML = '<p style="text-align:center; opacity:0.5; font-size:11px; margin-top: 50px;">Bolsa vacía.</p>';
+                counter.innerText = '0';
+                totalUI.innerText = '$0 COP';
+                return;
+            }
+
+            let totalItems = 0; let totalPrice = 0;
+            cart.forEach(item => {
+                totalItems += item.quantity;
+                let lineTotal = item.price * item.quantity;
+                totalPrice += lineTotal;
+                container.innerHTML += `
+                    <div class="cart-item">
+                        <div>
+                            <strong>${item.name}</strong>
+                            <span style="color:var(--texto-suave); display:block; font-size:10px;">${item.quantity} x $${item.price.toLocaleString('es-CO')}</span>
+                            <button class="btn-remove" onclick="removeFromCart('${item.id}')">Eliminar</button>
+                        </div>
+                        <div style="font-weight: 500;">$${lineTotal.toLocaleString('es-CO')}</div>
+                    </div>
+                `;
+            });
+            counter.innerText = totalItems;
+            totalUI.innerText = `$${totalPrice.toLocaleString('es-CO')} COP`;
+        }
+
+        function initCheckout() {
+            if (cart.length === 0) return;
+            const totalAmount = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+            const cartDescription = cart.map(item => `${item.quantity}x ${item.name}`).join(' | ');
+
+            var handler = ePayco.checkout.configure({ key: 'TU_LLAVE_PUBLICA_DE_EPAYCO', test: true });
+            handler.open({
+                name: "Ambarino 1998", description: cartDescription, currency: "cop", amount: totalAmount.toString(),
+                tax_base: "0", tax: "0", country: "co", lang: "es", external: "false"
+            });
+        }
+    </script>
+</body>
+</html>
