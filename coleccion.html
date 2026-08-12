@@ -250,17 +250,23 @@
             `;
             galeria.appendChild(card);
 
-            // Activar Carrusel Automático (Solo si tiene > 1 foto)
-            if (prod.imagenes.length > 1) {
-                let currentSlide = 0;
-                const slides = document.querySelectorAll(`.slide-${prod.id}`);
-                setInterval(() => {
-                    slides[currentSlide].classList.remove('active');
-                    currentSlide = (currentSlide + 1) % slides.length;
-                    slides[currentSlide].classList.add('active');
-                }, 3000); // Cambio de foto cada 3 segundos
-            }
-        });
+        
+            // Activar Carrusel Manual al hacer clic (Solo si tiene > 1 foto)
+if (prod.imagenes.length > 1) {
+    let currentSlide = 0;
+    const wrapper = document.getElementById(`wrap-${prod.id}`);
+    const slides = document.querySelectorAll(`.slide-${prod.id}`);
+    
+    // Le ponemos cursor de "manito" para que el usuario sepa que puede hacer clic
+    wrapper.style.cursor = 'pointer'; 
+
+    // Al hacer clic en la imagen, pasamos a la siguiente
+    wrapper.addEventListener('click', () => {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = (currentSlide + 1) % slides.length; // Avanza 1 y vuelve a 0 si llega al final
+        slides[currentSlide].classList.add('active');
+    });
+}
 
         // ---------------------------------------------------------------- //
         // FUNCIONES DE INTERFAZ Y CARRITO (Tal cual las diseñaste)
