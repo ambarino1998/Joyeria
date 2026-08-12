@@ -10,7 +10,7 @@
     <script type="text/javascript" src="https://checkout.epayco.co/checkout.js"></script>
     
     <style>
-        /* Reutilizamos los mismos estilos base para mantener la coherencia visual */
+        /* Estilos base de la marca */
         :root {
             --bg-marfil: #fdfbf7; --color-cafe: #1a1410; --color-dorado: #c2a26a; --blanco-puro: #ffffff;
             --texto-suave: rgba(26, 20, 16, 0.65); --transicion: all 0.7s cubic-bezier(0.25, 1, 0.5, 1);
@@ -42,17 +42,23 @@
         /* Grilla de productos */
         .grid-productos { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 40px; margin-bottom: 120px; }
         .tarjeta-producto { background-color: transparent; position: relative; display: flex; flex-direction: column; transition: var(--transicion); cursor: pointer; }
-        .tarjeta-producto:hover .imagen-wrapper img { transform: scale(1.04); }
         .badge-etiqueta { position: absolute; top: 15px; left: 15px; font-size: 8px; text-transform: uppercase; letter-spacing: 2px; background-color: var(--bg-marfil); padding: 5px 12px; z-index: 2; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .imagen-wrapper { width: 100%; height: 350px; overflow: hidden; margin-bottom: 20px; background-color: #f2ece4; }
-        .imagen-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        
+        /* Carrusel e Imagenes */
+        .imagen-wrapper { position: relative; width: 100%; height: 350px; overflow: hidden; margin-bottom: 20px; background-color: #f2ece4; }
+        .imagen-wrapper img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.8s ease-in-out, transform 1.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        .imagen-wrapper img.active { opacity: 1; }
+        /* Efecto Zoom en Hover solo para la imagen activa */
+        .tarjeta-producto:hover .imagen-wrapper img.active { transform: scale(1.04); }
+        
         .info-producto h3 { font-size: 20px; margin-bottom: 4px; }
         .info-producto .materiales { font-size: 10px; color: var(--texto-suave); margin-bottom: 15px; display: block; text-transform: uppercase; letter-spacing: 1px; }
+        .info-producto .descripcion { font-size: 11px; color: var(--texto-suave); margin-bottom: 15px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .info-producto .precio-tag { font-size: 14px; color: var(--color-dorado); margin-bottom: 15px; }
         .btn-agregar { background: none; border: none; border-bottom: 1px solid rgba(26, 20, 16, 0.2); color: var(--color-cafe); padding: 8px 0; text-transform: uppercase; letter-spacing: 1.5px; font-size: 10px; cursor: pointer; width: 100%; text-align: left; transition: 0.3s; }
         .btn-agregar:hover { color: var(--color-dorado); border-bottom-color: var(--color-dorado); padding-left: 8px; }
 
-        /* Carrito (Igual que en index) */
+        /* Carrito */
         .cart-trigger { position: fixed; bottom: 30px; right: 30px; background-color: var(--color-cafe); color: var(--blanco-puro); padding: 16px 24px; text-transform: uppercase; letter-spacing: 2px; font-size: 10px; cursor: pointer; z-index: 1000; display: flex; align-items: center; gap: 12px; box-shadow: 0 15px 30px rgba(0,0,0,0.15); transition: 0.4s; }
         .cart-trigger:hover { background-color: var(--color-dorado); transform: translateY(-3px); }
         .cart-count { border-left: 1px solid rgba(255,255,255,0.3); padding-left: 12px; }
@@ -93,51 +99,13 @@
             <div class="filtro-container">
                 <button class="btn-categoria active" data-filter="all">Todas</button>
                 <button class="btn-categoria" data-filter="anillos">Anillos</button>
-                <button class="btn-categoria" data-filter="cuello">Cadenas</button>
+                <button class="btn-categoria" data-filter="cuello">Collares</button>
                 <button class="btn-categoria" data-filter="oreja">Aretes</button>
                 <button class="btn-categoria" data-filter="muneca">Brazaletes</button>
             </div>
 
-            <div class="grid-productos" id="galeria-productos">
-                
-                <!-- PRODUCTO 1 -->
-                <article class="tarjeta-producto" data-category="muneca">
-                    <span class="badge-etiqueta">Edición Especial</span>
-                    <div class="imagen-wrapper"><img src="imagenes/brazalete-777.jpg" alt="Brazalete 777"></div>
-                    <div class="info-producto">
-                        <h3>Brazalete 777</h3>
-                        <span class="materiales">Plata 925 & Acrílico</span>
-                        <div class="precio-tag">$280.000 COP</div>
-                        <button class="btn-agregar" onclick="addToCart('brz-777', 'Brazalete 777', 280000)">Agregar a la Bolsa</button>
-                    </div>
-                </article>
-
-                <!-- PRODUCTO 2 -->
-                <article class="tarjeta-producto" data-category="anillos">
-                    <div class="imagen-wrapper"><img src="imagenes/anillo-verde.jpg" alt="Anillo Sello"></div>
-                    <div class="info-producto">
-                        <h3>Anillo Sello de Autor</h3>
-                        <span class="materiales">Oro 18k / Esmeralda</span>
-                        <div class="precio-tag">$450.000 COP</div>
-                        <button class="btn-agregar" onclick="addToCart('an-sello', 'Anillo Sello', 450000)">Agregar a la Bolsa</button>
-                    </div>
-                </article>
-
-                <!-- PRODUCTO 3 -->
-                <article class="tarjeta-producto" data-category="cuello">
-                    <div class="imagen-wrapper"><img src="imagenes/cadena-basica.jpg" alt="Gargantilla"></div>
-                    <div class="info-producto">
-                        <h3>Gargantilla Industrial</h3>
-                        <span class="materiales">Plata Ley 925</span>
-                        <div class="precio-tag">$120.000 COP</div>
-                        <button class="btn-agregar" onclick="addToCart('cl-ind', 'Gargantilla Industrial', 120000)">Agregar a la Bolsa</button>
-                    </div>
-                </article>
-
-                <!-- AQUÍ PUEDES AGREGAR LOS OTROS 12 PRODUCTOS HACIA ABAJO -->
-                <!-- Solo copia y pega la estructura <article>...</article> y cambia los datos -->
-
-            </div>
+            <!-- Inyección Dinámica de Productos -->
+            <div class="grid-productos" id="galeria-productos"></div>
         </div>
     </main>
 
@@ -165,19 +133,151 @@
     </footer>
 
     <script>
-        // Memoria del carrito conectada a Local Storage
-        let cart = JSON.parse(localStorage.getItem('ambarino_cart')) || [];
+        // BASE DE DATOS DE AMBARINO 1998 (Precios Referenciales Agregados)
+        const catalogo = [
+            // CATEGORÍA: ARETES (Filtro: oreja)
+            {
+                id: "art-01", nombre: "MEDIA LUNA", categoriaDOM: "oreja", materiales: "Plata Esterlina", precio: 180000,
+                descripcion: "Candongas de diseño limpio y clásico con acabado espejo. Elaboradas a mano cuidando hasta el más mínimo detalle.",
+                imagenes: ["https://via.placeholder.com/400x500/f2ece4/1a1410?text=Media+Luna+1", "https://via.placeholder.com/400x500/f2ece4/1a1410?text=Media+Luna+2", "https://via.placeholder.com/400x500/f2ece4/1a1410?text=Media+Luna+3"]
+            },
+            {
+                id: "art-02", nombre: "ENTORCHADO INFINITO", categoriaDOM: "oreja", materiales: "Plata Esterlina", precio: 195000,
+                descripcion: "Curvas simétricas inspiradas en lo hermoso de lo que no puede acabar. Diseño moderno ante las clásicas candongas.",
+                imagenes: ["https://via.placeholder.com/400x500/f2ece4/1a1410?text=Entorchado+1", "https://via.placeholder.com/400x500/f2ece4/1a1410?text=Entorchado+2", "https://via.placeholder.com/400x500/f2ece4/1a1410?text=Entorchado+3"]
+            },
+            {
+                id: "art-03", nombre: "PERLAS DE AMOR", categoriaDOM: "oreja", materiales: "Plata Esterlina / Perla Natural", precio: 150000,
+                descripcion: "Perlas gemelas naturales abrazadas por una caja de plata decorada con un corazón.",
+                imagenes: ["https://via.placeholder.com/400x500/f2ece4/1a1410?text=Perlas+de+Amor"]
+            },
+            {
+                id: "art-04", nombre: "TOPOS DIAMANTADOS", categoriaDOM: "oreja", materiales: "Plata Esterlina Texturizada", precio: 120000,
+                descripcion: "Semi esferas con brillo particular logrado mediante máquina con punta de diamante.",
+                imagenes: ["https://via.placeholder.com/400x500/f2ece4/1a1410?text=Topos+Diamantados"]
+            },
+            {
+                id: "art-05", nombre: "CIRCUNFERENCIA PERFECTA", categoriaDOM: "oreja", materiales: "Plata Esterlina / Circón Suizo", precio: 140000,
+                descripcion: "Circones Suizos abrazados por plata esterlina. Pieza elaborada bajo pedido en su totalidad a mano.",
+                imagenes: ["https://via.placeholder.com/400x500/f2ece4/1a1410?text=Circunferencia"]
+            },
+            {
+                id: "art-06", nombre: "MUNDO OVALADO", categoriaDOM: "oreja", materiales: "Plata Esterlina / Circón Zafiro", precio: 160000,
+                descripcion: "Delicado conjunto con circones suizos ovalados azul zafiro y engaste clásico de uñas.",
+                imagenes: ["https://via.placeholder.com/400x500/f2ece4/1a1410?text=Mundo+Ovalado"]
+            },
+            {
+                id: "art-07", nombre: "VENTANAS AL MUNDO", categoriaDOM: "oreja", materiales: "Plata Esterlina / Ónix", precio: 170000,
+                descripcion: "Geometría simétrica con un hermoso ónix talla cabujón, expresando transparencia.",
+                imagenes: ["https://via.placeholder.com/400x500/f2ece4/1a1410?text=Ventanas+al+Mundo"]
+            },
+            // CATEGORÍA: ANILLOS (Filtro: anillos)
+            {
+                id: "an-01", nombre: "CLÁSICA", categoriaDOM: "anillos", materiales: "Enteramente Plata", precio: 130000,
+                descripcion: "Diseño atemporal completamente artesanal de una argolla discreta y elegante.",
+                imagenes: ["https://via.placeholder.com/400x500/f2ece4/1a1410?text=Clasica+1", "https://via.placeholder.com/400x500/f2ece4/1a1410?text=Clasica+2", "https://via.placeholder.com/400x500/f2ece4/1a1410?text=Clasica+3"]
+            },
+            {
+                id: "an-02", nombre: "TEXTURIZADA", categoriaDOM: "anillos", materiales: "Enteramente Plata", precio: 140000,
+                descripcion: "Argolla con texturas aleatorias inspiradas en la belleza precolombina.",
+                imagenes: ["https://via.placeholder.com/400x500/f2ece4/1a1410?text=Texturizada"]
+            },
+            {
+                id: "an-03", nombre: "HOJAS", categoriaDOM: "anillos", materiales: "Enteramente Plata", precio: 150000,
+                descripcion: "La naturaleza en tus manos, hojas talladas una a una por espléndidos orfebres.",
+                imagenes: ["https://via.placeholder.com/400x500/f2ece4/1a1410?text=Hojas+1", "https://via.placeholder.com/400x500/f2ece4/1a1410?text=Hojas+2", "https://via.placeholder.com/400x500/f2ece4/1a1410?text=Hojas+3"]
+            },
+            {
+                id: "an-04", nombre: "LAZO INFINITO", categoriaDOM: "anillos", materiales: "Engaste en Canal / Circón", precio: 160000,
+                descripcion: "Lazo delicado de una sola pieza de plata esterlina que abraza un circón suizo.",
+                imagenes: ["https://via.placeholder.com/400x500/f2ece4/1a1410?text=Lazo+Infinito"]
+            },
+            {
+                id: "an-05", nombre: "AGUA MINERALE", categoriaDOM: "anillos", materiales: "Engaste en Canal", precio: 180000,
+                descripcion: "Piedra talla marquise flotante entre dos láminas uniformes de plata esterlina.",
+                imagenes: ["https://via.placeholder.com/400x500/f2ece4/1a1410?text=Agua+Minerale"]
+            },
+            {
+                id: "an-06", nombre: "PUENTE AZUL", categoriaDOM: "anillos", materiales: "Engaste en Canal", precio: 200000,
+                descripcion: "Engaste seguro y limpio para lucir hermosos circones azul zafiro.",
+                imagenes: ["https://via.placeholder.com/400x500/f2ece4/1a1410?text=Puente+Azul"]
+            },
+            // CATEGORÍA: COLLARES (Filtro: cuello)
+            {
+                id: "col-01", nombre: "VENTANA SUBMARINA", categoriaDOM: "cuello", materiales: "Plata 925 / Acrílico Ámbar", precio: 220000,
+                descripcion: "Fusión de plata y acrílico amarillo unidas por remaches inspirados en maquinaria pesada.",
+                imagenes: ["https://via.placeholder.com/400x500/f2ece4/1a1410?text=Ventana+Submarina"]
+            },
+            {
+                id: "col-02", nombre: "VENTANA DE AMOR", categoriaDOM: "cuello", materiales: "Plata 925 / Acrílico", precio: 210000,
+                descripcion: "Diseño único inspirado en las pasiones que nos dan profundo amor a la vida misma.",
+                imagenes: ["https://via.placeholder.com/400x500/f2ece4/1a1410?text=Ventana+de+Amor"]
+            },
+            // CATEGORÍA: BRAZALETES (Filtro: muneca)
+            {
+                id: "brz-777", nombre: "BRAZALETE 777", categoriaDOM: "muneca", materiales: "Plata 925 / Acrílico", precio: 280000,
+                descripcion: "Refuerza la idea de perfección. Centro de acrílico amarillo con fuertes remaches y broche de seguridad.",
+                imagenes: ["https://via.placeholder.com/400x500/f2ece4/1a1410?text=Brazalete+777"]
+            }
+        ];
 
+        // RENDERIZADO Y LÓGICA DE CARRUSEL
+        const galeria = document.getElementById('galeria-productos');
+
+        catalogo.forEach((prod, index) => {
+            // Generar imágenes del carrusel
+            let imgsHTML = '';
+            prod.imagenes.forEach((img, i) => {
+                let isActive = i === 0 ? 'active' : '';
+                imgsHTML += `<img src="${img}" class="slide-${prod.id} ${isActive}" alt="${prod.nombre}">`;
+            });
+
+            // Generar HTML de la Tarjeta
+            const card = document.createElement('article');
+            card.className = 'tarjeta-producto';
+            card.setAttribute('data-category', prod.categoriaDOM);
+            card.innerHTML = `
+                <div class="imagen-wrapper" id="wrap-${prod.id}">
+                    ${imgsHTML}
+                </div>
+                <div class="info-producto">
+                    <h3>${prod.nombre}</h3>
+                    <span class="materiales">${prod.materiales}</span>
+                    <p class="descripcion">${prod.descripcion}</p>
+                    <div class="precio-tag">$${prod.precio.toLocaleString('es-CO')} COP</div>
+                    <button class="btn-agregar" onclick="addToCart('${prod.id}', '${prod.nombre}', ${prod.precio})">Agregar a la Bolsa</button>
+                </div>
+            `;
+            galeria.appendChild(card);
+
+            // Activar Carrusel Automático (Solo si tiene > 1 foto)
+            if (prod.imagenes.length > 1) {
+                let currentSlide = 0;
+                const slides = document.querySelectorAll(`.slide-${prod.id}`);
+                setInterval(() => {
+                    slides[currentSlide].classList.remove('active');
+                    currentSlide = (currentSlide + 1) % slides.length;
+                    slides[currentSlide].classList.add('active');
+                }, 3000); // Cambio de foto cada 3 segundos
+            }
+        });
+
+        // ---------------------------------------------------------------- //
+        // FUNCIONES DE INTERFAZ Y CARRITO (Tal cual las diseñaste)
+        // ---------------------------------------------------------------- //
+        
+        let cart = JSON.parse(localStorage.getItem('ambarino_cart')) || [];
         document.addEventListener('DOMContentLoaded', () => { renderCart(); });
 
-        // Filtros
+        // Filtros del Catálogo
         const filterBtns = document.querySelectorAll('.btn-categoria');
-        const products = document.querySelectorAll('.tarjeta-producto');
         filterBtns.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 filterBtns.forEach(b => b.classList.remove('active'));
                 e.target.classList.add('active');
                 const filterValue = e.target.getAttribute('data-filter');
+                const products = document.querySelectorAll('.tarjeta-producto'); // Recargar nodos dinámicos
+                
                 products.forEach(prod => {
                     if (filterValue === 'all' || prod.getAttribute('data-category') === filterValue) {
                         prod.style.display = 'flex';
@@ -188,7 +288,6 @@
             });
         });
 
-        // Funciones del Carrito
         function toggleCart() { document.getElementById('cart-drawer').classList.toggle('is-open'); }
 
         function addToCart(id, name, price) {
@@ -198,7 +297,6 @@
             } else {
                 cart.push({ id, name, price, quantity: 1 });
             }
-            // Guardar en la memoria del navegador
             localStorage.setItem('ambarino_cart', JSON.stringify(cart));
             renderCart();
             document.getElementById('cart-drawer').classList.add('is-open');
