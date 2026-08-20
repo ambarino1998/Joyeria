@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de Pieza | Ambarino 1998</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <script type="text/javascript" src="https://checkout.epayco.co/checkout.js"></script>
+    
+    <style>
+        /* ESTILOS BASE Y MARCA */
+        :root {
+            --bg-marfil: #fdfbf7; --color-cafe: #1a1410; --color-dorado: #c2a26a; --blanco-puro: #ffffff;
+            --texto-suave: rgba(26, 20, 16, 0.65); --transicion: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: var(--bg-marfil); color: var(--color-cafe); font-family: 'Montserrat', sans-serif; font-weight: 300; line-height: 1.8; overflow-x: hidden; }
+        h1, h2, h3, .brand-logo { font-family: 'Cormorant Garamond', serif; font-weight: 300; }
+        
+        header { position: fixed; top: 0; left: 0; width: 100%; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; z-index: 100; background-color: rgba(253, 251, 247, 0.95); box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03); }
+        .brand-logo { font-size: 24px; letter-spacing: 5px; text-transform: uppercase; cursor: pointer; text-decoration: none; color: var(--color-cafe); }
+        nav a { text-decoration: none; color: var(--color-cafe); margin-left: 40px; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.7; transition: var(--transicion); }
+        nav a:hover { opacity: 1; color: var(--color-dorado); }
+
+        .producto-container { padding: 140px 5% 80px 5%; max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
+        
+        .galeria-principal { width: 100%; aspect-ratio: 1/1; background-color: #f2ece4; margin-bottom: 15px; overflow: hidden; border-radius: 4px; display: flex; align-items: center; justify-content: center; }
+        .galeria-principal img { width: 100%; height: 100%; object-fit: cover; transition: var(--transicion); }
+        .miniaturas { display: flex; gap: 15px; flex-wrap: wrap; }
+        .miniaturas img { width: 80px; height: 80px; object-fit: cover; cursor: pointer; border-radius: 4px; border: 2px solid transparent; transition: var(--transicion); background-color: #f2ece4; }
+        .miniaturas img:hover { border-color: var(--color-dorado); }
+
+        .producto-info h1 { font-size: 32px; text-transform: uppercase; margin-bottom: 10px; line-height: 1.2; }
+        .sku-dispo { font-size: 11px; color: var(--texto-suave); margin-bottom: 20px; letter-spacing: 1px; }
+        .descripcion-texto { font-size: 13px; color: var(--texto-suave); margin-bottom: 25px; }
+        
+        .precios { margin-bottom: 30px; display: flex; align-items: center; gap: 15px; }
+        .precio-actual { font-size: 28px; font-weight: 500; font-family: 'Montserrat', sans-serif; }
+        
+        .controles-compra { display: flex; gap: 15px; margin-bottom: 30px; }
+        .cantidad-box { display: flex; align-items: center; border: 1px solid var(--color-cafe); padding: 0 15px; }
+        .cantidad-box button { background: none; border: none; font-size: 18px; cursor: pointer; color: var(--color-cafe); }
+        .cantidad-box input { width: 40px; text-align: center; border: none; background: none; font-size: 14px; color: var(--color-cafe); }
+        
+        .btn-primario { flex-grow: 1; padding: 15px 30px; background-color: var(--color-dorado); border: 1px solid var(--color-dorado); color: var(--blanco-puro); text-transform: uppercase; letter-spacing: 2px; font-size: 11px; cursor: pointer; transition: 0.3s; font-weight: 500; }
+        .btn-primario:hover { background-color: var(--color-cafe); border-color: var(--color-cafe); }
+
+        .btn-whatsapp { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 15px; background-color: #25D366; color: white; text-decoration: none; text-transform: uppercase; letter-spacing: 2px; font-size: 11px; font-weight: 500; transition: 0.3s; margin-bottom: 30px; border-radius: 4px; }
+        .btn-whatsapp:hover { background-color: #128C7E; }
+
+        .detalles-extra { border-top: 1px solid rgba(0,0,0,0.1); padding-top: 20px; font-size: 13px; color: var(--texto-suave); }
+        
+        @media (max-width: 768px) {
+            .producto-container { grid-template-columns: 1fr; gap: 40px; padding-top: 100px; }
+            nav { display: none; }
+        }
+        
+        /* ESTILOS DEL CARRITO COMPARTIDO */
+        .cart-trigger { position: fixed; bottom: 30px; right: 30px; background-color: var(--color-cafe); color: var(--blanco-puro); padding: 16px 24px; text-transform: uppercase; letter-spacing: 2px; font-size: 10px; cursor: pointer; z-index: 1000; display: flex; align-items: center; gap: 12px; transition: 0.4s; }
+        .drawer-carrito { position: fixed; top: 0; right: -100%; width: 100%; max-width: 420px; height: 100%; background-color: var(--blanco-puro); box-shadow: -10px 0 40px rgba(0,0,0,0.08); z-index: 2000; transition: right 0.6s; display: flex; flex-direction: column; padding: 40px; }
+        .drawer-carrito.is-open { right: 0; }
+        .drawer-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 20px; margin-bottom: 20px; }
+        .btn-close { background: none; border: none; font-size: 28px; cursor: pointer; }
+        .cart-body { flex: 1; overflow-y: auto; }
+        .cart-item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #f9f9f9; font-size: 12px; }
+        .btn-checkout { background-color: var(--color-cafe); color: var(--blanco-puro); width: 100%; padding: 15px; border: none; text-transform: uppercase; letter-spacing: 2px; font-size: 10px; cursor: pointer; transition: 0.3s; margin-top:20px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="brand-logo">Ambarino 1998</a>
+        <nav>
+            <a href="index.html">Inicio</a>
+            <a href="coleccion.html">Colección</a>
+        </nav>
+    </header>
+
+    <main class="producto-container">
+        <!-- SECCIÓN IZQUIERDA: FOTOS DINÁMICAS -->
+        <div class="galeria-seccion">
+            <div class="galeria-principal">
+                <img id="imagen-principal" src="" alt="Cargando...">
+            </div>
+            <div class="miniaturas" id="contenedor-miniaturas">
+                <!-- Se llenan solas con Javascript -->
+            </div>
+        </div>
+
+        <!-- SECCIÓN DERECHA: INFO DINÁMICA -->
+        <div class="producto-info">
+            <h1 id="prod-title">Cargando Pieza...</h1>
+            <div class="sku-dispo">
+                <span>SKU: <span id="prod-sku">---</span></span> | <span style="color: #28a745;">Disponible</span>
+            </div>
+            
+            <p class="descripcion-texto" id="prod-desc"></p>
+
+            <div class="precios">
+                <span class="precio-actual" id="prod-price">$0</span>
+            </div>
+
+            <div class="controles-compra">
+                <div class="cantidad-box">
+                    <button onclick="cambiarCantidad(-1)">-</button>
+                    <input type="number" id="cantidad-input" value="1" readonly>
+                    <button onclick="cambiarCantidad(1)">+</button>
+                </div>
+                <button class="btn-primario" onclick="agregarAlCarrito()">Comprar Ahora</button>
+            </div>
+
+            <a href="#" id="btn-wa" target="_blank" class="btn-whatsapp">
+                Atención por WhatsApp
+            </a>
+
+            <div class="detalles-extra">
+                <p id="prod-mat"></p>
+                <p>✓ Hecho a mano, desde cero en nuestro estudio.</p>
+                <p style="text-decoration: underline; cursor: pointer; margin-top: 10px;">Ver Tabla de Tallas</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- UI Carrito Compartido -->
+    <div class="cart-trigger" onclick="toggleCart()">
+        <span>Mi Bolsa</span>
+        <span id="cart-counter" style="border-left: 1px solid rgba(255,255,255,0.3); padding-left: 12px;">0</span>
+    </div>
+
+    <aside class="drawer-carrito" id="cart-drawer">
+        <div class="drawer-header">
+            <h2 style="font-size: 24px;">Tu Selección</h2>
+            <button class="btn-close" onclick="toggleCart()">&times;</button>
+        </div>
+        <div class="cart-body" id="cart-items-container"></div>
+        <div class="cart-total" style="display: flex; justify-content: space-between; font-weight: 500; font-size: 16px; margin-top: 20px;">
+            <span>Subtotal</span><span id="cart-total-price">$0 COP</span>
+        </div>
+        <button class="btn-checkout" onclick="initCheckout()">Finalizar Compra</button>
+    </aside>
+
+    <script>
+        // 1. EL MISMO CATÁLOGO DE TU COLECCIÓN
+        const catalogo = [
+            { id: "art-02", nombre: "ENTORCHADO INFINITO", materiales: "Plata Esterlina", precio: 195000, descripcion: "Curvas simétricas inspiradas en lo hermoso de lo que no puede acabar. Diseño moderno ante las clásicas candongas.", imagenes: ["imagenes/entorchado.png", "imagenes/entorchado1.png", "imagenes/entorchado2.png"] },
+            { id: "art-03", nombre: "PERLAS DE AMOR", materiales: "Plata Esterlina / Perla Natural", precio: 150000, descripcion: "Perlas gemelas naturales abrazadas por una caja de plata decorada con un corazón.", imagenes: ["imagenes/perlasamor.png", "imagenes/perlasamor1.png", "imagenes/perlasamor2.png"] },
+            { id: "art-04", nombre: "TOPOS DIAMANTADOS", materiales: "Plata Esterlina Texturizada", precio: 120000, descripcion: "Semi esferas con brillo particular logrado mediante máquina con punta de diamante.", imagenes: ["imagenes/toposdiamantados.png", "imagenes/toposdiamantados1.png", "imagenes/toposdiamantados2.png"] },
+            { id: "art-05", nombre: "CIRCUNFERENCIA PERFECTA", materiales: "Plata Esterlina / Circón Suizo", precio: 140000, descripcion: "Circones Suizos abrazados por plata esterlina. Pieza elaborada bajo pedido en su totalidad a mano.", imagenes: ["imagenes/circunp.png", "imagenes/circunp1.png", "imagenes/circunp2.png"] },
+            { id: "art-06", nombre: "MUNDO OVALADO", materiales: "Plata Esterlina / Circón Zafiro", precio: 160000, descripcion: "Delicado conjunto con circones suizos ovalados azul zafiro y engaste clásico de uñas.", imagenes: ["imagenes/MUNDO.png", "imagenes/MUNDO1.png", "imagenes/MUNDO2.png"] },
+            { id: "art-07", nombre: "VENTANAS AL MUNDO", materiales: "Plata Esterlina / Ónix", precio: 170000, descripcion: "Geometría simétrica con un hermoso ónix talla cabujón, expresando transparencia.", imagenes: ["imagenes/ventana.png", "imagenes/ventana1.png", "imagenes/ventana2.png"] },
+            { id: "an-01", nombre: "ALIANZAS DE PROMESA", materiales: "Enteramente Plata", precio: 130000, descripcion: "Diseño atemporal completamente artesanal de dos argollas media caña perfectas para sellar una promesa.", imagenes: ["imagenes/mediac.png", "imagenes/mediac1.png", "imagenes/mediac2.png", "imagenes/mediac3.png"] },
+            { id: "an-02", nombre: "CLÁSICA", materiales: "Enteramente Plata", precio: 130000, descripcion: "Diseño atemporal completamente artesanal de una argolla discreta y elegante.", imagenes: ["imagenes/clasica.png", "imagenes/clasica1.png", "imagenes/clasica2.png"] },
+            { id: "an-03", nombre: "TEXTURIZADA", materiales: "Enteramente Plata", precio: 140000, descripcion: "Argolla con texturas aleatorias inspiradas en la belleza precolombina.", imagenes: ["imagenes/epla.png", "imagenes/epla1.png", "imagenes/epla2.png"] },
+            { id: "an-04", nombre: "HOJAS", materiales: "Enteramente Plata", precio: 150000, descripcion: "La naturaleza en tus manos, hojas talladas una a una por espléndidos orfebres.", imagenes: ["imagenes/hoja.png", "imagenes/hoja1.png", "imagenes/hoja2.png"] },
+            { id: "an-05", nombre: "LAZO INFINITO", materiales: "Engaste en Canal / Circón", precio: 160000, descripcion: "Lazo delicado de una sola pieza de plata esterlina que abraza un circón suizo.", imagenes: ["imagenes/lazo.png", "imagenes/lazo1.png", "imagenes/lazo2.png"] },
+            { id: "an-06", nombre: "AGUA MINERALE", materiales: "Engaste en Canal", precio: 180000, descripcion: "Piedra talla marquise flotante entre dos láminas uniformes de plata esterlina.", imagenes: ["imagenes/agua.png", "imagenes/agua1.png", "imagenes/agua2.png"] },
+            { id: "an-07", nombre: "PUENTE AZUL", materiales: "Engaste en Canal", precio: 200000, descripcion: "Engaste seguro y limpio para lucir hermosos circones azul zafiro.", imagenes: ["imagenes/azul.png", "imagenes/azul1.png", "imagenes/azul2.png"] },
+            { id: "col-01", nombre: "VENTANA SUBMARINA", materiales: "Plata 925 / Acrílico Ámbar", precio: 220000, descripcion: "Fusión de plata y acrílico amarillo unidas por remaches inspirados en maquinaria pesada.", imagenes: ["imagenes/sub.png", "imagenes/sub1.png"] },
+            { id: "col-02", nombre: "VENTANA DE AMOR", materiales: "Plata 925 / Acrílico", precio: 210000, descripcion: "Diseño único inspirado en las pasiones que nos dan profundo amor a la vida misma.", imagenes: ["imagenes/cor.png", "imagenes/cor1.png"] },
+            { id: "col-03", nombre: "PERLA MAR EN TU CUELLO", materiales: "Plata 925 / Acrílico", precio: 210000, descripcion: "Diseño único inspirado en el proceso que lleva al nacimiento de una hermosa perla.", imagenes: ["imagenes/perla.png", "imagenes/perla1.png"] },
+            { id: "brz-777", nombre: "BRAZALETE 777", materiales: "Plata 925 / Acrílico", precio: 280000, descripcion: "Refuerza la idea de perfección. Centro de acrílico amarillo con fuertes remaches y broche de seguridad.", imagenes: ["imagenes/777.png"] }
+        ];
+
+        // 2. MAGIA DINÁMICA: Leer la URL para saber qué pieza mostrar
+        let productoActual = null;
+        
+        window.onload = () => {
+            const params = new URLSearchParams(window.location.search);
+            const idProducto = params.get('id');
+            productoActual = catalogo.find(p => p.id === idProducto);
+
+            if(productoActual) {
+                // Llenar textos
+                document.getElementById('prod-title').innerText = productoActual.nombre;
+                document.getElementById('prod-sku').innerText = productoActual.id;
+                document.getElementById('prod-desc').innerText = productoActual.descripcion;
+                document.getElementById('prod-mat').innerText = "✓ Material: " + productoActual.materiales;
+                document.getElementById('prod-price').innerText = "$" + productoActual.precio.toLocaleString('es-CO');
+                
+                // Configurar WhatsApp
+                const mensajeWa = `Hola, quiero más información sobre la pieza: ${productoActual.nombre} (SKU: ${productoActual.id})`;
+                document.getElementById('btn-wa').href = `https://wa.me/573219659337?text=${encodeURIComponent(mensajeWa)}`;
+
+                // Llenar Imágenes
+                document.getElementById('imagen-principal').src = productoActual.imagenes[0];
+                const contMini = document.getElementById('contenedor-miniaturas');
+                productoActual.imagenes.forEach(img => {
+                    contMini.innerHTML += `<img src="${img}" onclick="cambiarImagen(this.src)">`;
+                });
+            } else {
+                document.getElementById('prod-title').innerText = "Pieza no encontrada";
+            }
+            renderCart();
+        };
+
+        function cambiarImagen(ruta) { document.getElementById('imagen-principal').src = ruta; }
+
+        function cambiarCantidad(cambio) {
+            let input = document.getElementById('cantidad-input');
+            let nueva = parseInt(input.value) + cambio;
+            if (nueva >= 1) input.value = nueva;
+        }
+
+        // 3. LÓGICA DEL CARRITO
+        let cart = JSON.parse(localStorage.getItem('ambarino_cart')) || [];
+        function toggleCart() { document.getElementById('cart-drawer').classList.toggle('is-open'); }
+
+        function agregarAlCarrito() {
+            if(!productoActual) return;
+            let cantidad = parseInt(document.getElementById('cantidad-input').value);
+            let existe = cart.find(item => item.id === productoActual.id);
+            if (existe) { existe.quantity += cantidad; } 
+            else { cart.push({ id: productoActual.id, name: productoActual.nombre, price: productoActual.precio, quantity: cantidad }); }
+            
+            localStorage.setItem('ambarino_cart', JSON.stringify(cart));
+            renderCart();
+            document.getElementById('cart-drawer').classList.add('is-open');
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            localStorage.setItem('ambarino_cart', JSON.stringify(cart));
+            renderCart();
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-items-container');
+            const counter = document.getElementById('cart-counter');
+            const totalUI = document.getElementById('cart-total-price');
+            
+            container.innerHTML = '';
+            if (cart.length === 0) {
+                container.innerHTML = '<p style="text-align:center; opacity:0.5; font-size:11px; margin-top: 50px;">Bolsa vacía.</p>';
+                counter.innerText = '0';
+                totalUI.innerText = '$0 COP';
+                return;
+            }
+
+            let totalItems = 0; let totalPrice = 0;
+            cart.forEach(item => {
+                totalItems += item.quantity;
+                let lineTotal = item.price * item.quantity;
+                totalPrice += lineTotal;
+                container.innerHTML += `
+                    <div class="cart-item">
+                        <div>
+                            <strong>${item.name}</strong>
+                            <span style="display:block; font-size:10px; opacity: 0.7;">${item.quantity} x $${item.price.toLocaleString('es-CO')}</span>
+                            <button onclick="removeFromCart('${item.id}')" style="background:none; border:none; color:#a34141; cursor:pointer; font-size:9px; text-decoration:underline;">Eliminar</button>
+                        </div>
+                        <div style="font-weight: 500;">$${lineTotal.toLocaleString('es-CO')}</div>
+                    </div>
+                `;
+            });
+            counter.innerText = totalItems;
+            totalUI.innerText = `$${totalPrice.toLocaleString('es-CO')} COP`;
+        }
+    </script>
+</body>
+</html>
