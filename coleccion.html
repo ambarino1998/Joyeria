@@ -242,7 +242,7 @@
             card.className = 'tarjeta-producto';
             card.setAttribute('data-category', prod.categoriaDOM);
             card.innerHTML = `
-                <div class="imagen-wrapper" id="wrap-${prod.id}">
+                <div class="imagen-wrapper" id="wrap-${prod.id}" onclick="window.location.href='producto.html?id=${prod.id}'" style="cursor:pointer;">
                     ${imgsHTML}
                 </div>
                 <div class="info-producto">
