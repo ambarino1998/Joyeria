@@ -108,7 +108,8 @@
         <div class="producto-info">
             <h1 id="prod-title">Cargando Pieza...</h1>
             <div class="sku-dispo">
-                <span>SKU: <span id="prod-sku">---</span></span> | <span style="color: #28a745;">Disponible</span>
+                <!-- AQUÍ AGREGAMOS EL ID AL ESTADO -->
+                <span>SKU: <span id="prod-sku">---</span></span> | <span id="prod-estado" style="color: #28a745;">Disponible</span>
             </div>
             
             <p class="descripcion-texto" id="prod-desc"></p>
@@ -123,7 +124,8 @@
                     <input type="number" id="cantidad-input" value="1" readonly>
                     <button onclick="cambiarCantidad(1)">+</button>
                 </div>
-                <button class="btn-primario" onclick="agregarAlCarrito()">Comprar Ahora</button>
+                <!-- AQUÍ AGREGAMOS EL ID AL BOTÓN DE COMPRA -->
+                <button id="btn-comprar" class="btn-primario" onclick="agregarAlCarrito()">Comprar Ahora</button>
             </div>
 
             <a href="#" id="btn-wa" target="_blank" class="btn-whatsapp">
@@ -177,8 +179,6 @@
             { id: "col-02", nombre: "VENTANA DE AMOR", materiales: "Plata 925 / Acrílico", precio: 210000, descripcion: "Diseño único inspirado en las pasiones que nos dan profundo amor a la vida misma.", imagenes: ["imagenes/cor.png", "imagenes/cor1.png"] },
             { id: "col-03", nombre: "PERLA MAR EN TU CUELLO", materiales: "Plata 925 / Acrílico", precio: 210000, descripcion: "Diseño único inspirado en el proceso que lleva al nacimiento de una hermosa perla.", imagenes: ["imagenes/perla.png", "imagenes/perla1.png"] },
             { id: "brz-777", nombre: "BRAZALETE 777", materiales: "Plata 925 / Acrílico", precio: 280000, descripcion: "Refuerza la idea de perfección. Centro de acrílico amarillo con fuertes remaches y broche de seguridad.", imagenes: ["imagenes/777.png"] }, 
-            
-
         ];
 
         // 2. MAGIA DINÁMICA: Leer la URL para saber qué pieza mostrar
@@ -197,6 +197,24 @@
                 document.getElementById('prod-mat').innerText = "✓ Material: " + productoActual.materiales;
                 document.getElementById('prod-price').innerText = "$" + productoActual.precio.toLocaleString('es-CO');
                 
+                // AQUÍ AGREGAMOS LA LÓGICA DE INVENTARIO
+                const estadoUI = document.getElementById('prod-estado');
+                const btnComprar = document.getElementById('btn-comprar');
+                
+                if (productoActual.disponible === false) {
+                    estadoUI.innerText = "Agotado";
+                    estadoUI.style.color = "#a34141"; // Color rojo
+                    btnComprar.innerText = "Pieza Agotada";
+                    btnComprar.style.backgroundColor = "#e0e0e0";
+                    btnComprar.style.borderColor = "#e0e0e0";
+                    btnComprar.style.color = "#888";
+                    btnComprar.style.cursor = "not-allowed";
+                    btnComprar.onclick = null; // Bloquea el clic
+                } else {
+                    estadoUI.innerText = "Disponible";
+                    estadoUI.style.color = "#28a745"; // Color verde
+                }
+
                 // Configurar WhatsApp
                 const mensajeWa = `Hola, quiero más información sobre la pieza: ${productoActual.nombre} (SKU: ${productoActual.id})`;
                 document.getElementById('btn-wa').href = `https://wa.me/573219659337?text=${encodeURIComponent(mensajeWa)}`;
