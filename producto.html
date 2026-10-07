@@ -69,7 +69,12 @@
         .detalles-extra { border-top: 1px solid rgba(0,0,0,0.1); padding-top: 20px; font-size: 13px; color: var(--texto-suave); }
         
         @media (max-width: 768px) {
+            .producto-container { 
+                grid-template-columns: 1fr; /* Obliga a usar una sola columna */
+                gap: 30px; /* Reduce el espacio entre las fotos y el título */
+            }
             .galeria-principal { height: 350px; }
+            .miniaturas { justify-content: center; } /* Centra los cuadritos de abajo */
         }
         
         /* ESTILOS DEL CARRITO COMPARTIDO */
