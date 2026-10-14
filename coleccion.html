@@ -245,6 +245,17 @@
             });
 
             // Generar HTML de la Tarjeta
+            
+            // 1. Evaluamos si hay stock para saber qué botón dibujar
+            let botonCartHTML = '';
+            if (prod.disponible === false) {
+                // Botón bloqueado y en color rojo oscuro
+                botonCartHTML = `<button class="btn-agregar" style="color: #a34141; border-bottom-color: #a34141; cursor: not-allowed;" disabled>Agotado</button>`;
+            } else {
+                // Botón normal interactivo
+                botonCartHTML = `<button class="btn-agregar" onclick="addToCart('${prod.id}', '${prod.nombre}', ${prod.precio})">Agregar a la Bolsa</button>`;
+            }
+
             const card = document.createElement('article');
             card.className = 'tarjeta-producto';
             card.setAttribute('data-category', prod.categoriaDOM);
@@ -257,7 +268,7 @@
                     <span class="materiales">${prod.materiales}</span>
                     <p class="descripcion">${prod.descripcion}</p>
                     <div class="precio-tag">$${prod.precio.toLocaleString('es-CO')} COP</div>
-                    <button class="btn-agregar" onclick="addToCart('${prod.id}', '${prod.nombre}', ${prod.precio})">Agregar a la Bolsa</button>
+                    ${botonCartHTML}
                 </div>
             `;
             galeria.appendChild(card);
