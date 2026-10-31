@@ -222,7 +222,7 @@
             const totalAmount = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
             const cartDescription = cart.map(item => `${item.quantity}x ${item.name}`).join(' | ');
 
-            var handler = ePayco.checkout.configure({ key: 'TU_LLAVE_PUBLICA_DE_EPAYCO', test: true });
+            var handler = ePayco.checkout.configure({ key: 'f2acf1482aa1614b4e5f3ce51372bf8d', test: true });
             handler.open({
                 name: "Ambarino 1998", description: cartDescription, currency: "cop", amount: totalAmount.toString(),
                 tax_base: "0", tax: "0", country: "co", lang: "es", external: "false"
