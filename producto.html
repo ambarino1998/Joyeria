@@ -299,5 +299,79 @@
             totalUI.innerText = `$${totalPrice.toLocaleString('es-CO')} COP`;
         }
     </script>
+    <script>
+        // LÓGICA DE CARRITO CON MEMORIA (LOCAL STORAGE)
+        let cart = JSON.parse(localStorage.getItem('ambarino_cart')) || [];
+
+        document.addEventListener('DOMContentLoaded', () => { renderCart(); });
+
+        function toggleCart() { document.getElementById('cart-drawer').classList.toggle('is-open'); }
+
+        function addToCart(id, name, price) {
+            const existingItemIndex = cart.findIndex(item => item.id === id);
+            if (existingItemIndex > -1) {
+                cart[existingItemIndex].quantity += 1;
+            } else {
+                cart.push({ id, name, price, quantity: 1 });
+            }
+            localStorage.setItem('ambarino_cart', JSON.stringify(cart));
+            renderCart();
+            document.getElementById('cart-drawer').classList.add('is-open');
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            localStorage.setItem('ambarino_cart', JSON.stringify(cart));
+            renderCart();
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-items-container');
+            const counter = document.getElementById('cart-counter');
+            const totalUI = document.getElementById('cart-total-price');
+            
+            container.innerHTML = '';
+            
+            if (cart.length === 0) {
+                container.innerHTML = '<p style="text-align:center; opacity:0.5; font-size:11px; margin-top: 50px;">Bolsa vacía.</p>';
+                counter.innerText = '0';
+                totalUI.innerText = '$0 COP';
+                return;
+            }
+
+            let totalItems = 0; let totalPrice = 0;
+            cart.forEach(item => {
+                totalItems += item.quantity;
+                let lineTotal = item.price * item.quantity;
+                totalPrice += lineTotal;
+                container.innerHTML += `
+                    <div class="cart-item">
+                        <div>
+                            <strong>${item.name}</strong>
+                            <span style="color:var(--texto-suave); display:block; font-size:10px;">${item.quantity} x $${item.price.toLocaleString('es-CO')}</span>
+                            <button class="btn-remove" onclick="removeFromCart('${item.id}')">Eliminar</button>
+                        </div>
+                        <div style="font-weight: 500;">$${lineTotal.toLocaleString('es-CO')}</div>
+                    </div>
+                `;
+            });
+            counter.innerText = totalItems;
+            totalUI.innerText = `$${totalPrice.toLocaleString('es-CO')} COP`;
+        }
+
+        function initCheckout() {
+            if (cart.length === 0) return;
+            const totalAmount = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+            const cartDescription = cart.map(item => `${item.quantity}x ${item.name}`).join(' | ');
+
+            // ¡Pega tu llave pública de ePayco aquí abajo!
+            var handler = ePayco.checkout.configure({ key: 'PAGA_TU_LLAVE_AQUI', test: true });
+            
+            handler.open({
+                name: "Ambarino 1998", description: cartDescription, currency: "cop", amount: totalAmount.toString(),
+                tax_base: "0", tax: "0", country: "co", lang: "es", external: "false"
+            });
+        }
+    </script>
 </body>
 </html>
