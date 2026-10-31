@@ -136,43 +136,71 @@
         // BASE DE DATOS DE AMBARINO 1998 (Precios Referenciales Agregados)
         const catalogo = [
             // CATEGORÍA: ANILLOS (Filtro: anillos)
-            {
-                id: "an-01", nombre: "ARGOLLAS PLANAS CLÁSICAS", categoriaDOM: "anillos", disponible: true, materiales: "Plata Esterlina", precio: 386600,
-                descripcion: "Argollas planas en plata ley italiana, dos piezas que llevan consigo la huella de un mismo vínculo.",
+             {
+                id: "an-01", nombre: "ARGOLLA CLÁSICA MEDIA CAÑA", categoriaDOM: "anillos", disponible: true,materiales: "Enteramente Plata", precio: 304900,
+                descripcion: "Una argolla clásica media caña en plata ley italiana, una curva continua que abraza la luz con cada movimiento.",
+                imagenes: ["imagenes/clasica.png", "imagenes/clasica1.png", "imagenes/clasica2.png"]
+             {,
+                id: "an-02", nombre: "ARGOLLAS CLÁSICAS MEDIA CAÑA", categoriaDOM: "anillos", disponible: true,materiales: "Enteramente Plata", precio: 439900,
+                descripcion: "Dos argollas media caña en plata ley italiana, suaves en su forma y luminosas en cada giro.",
+                imagenes: ["imagenes/mediac.png", "imagenes/mediac1.png", "imagenes/mediac2.png", "imagenes/mediac3.png"]
+            {,
+                id: "an-03", nombre: "ARGOLLA PLANA CLÁSICA", categoriaDOM: "anillos", disponible: true, materiales: "Plata Esterlina", precio: 304900,
+                descripcion: "Una argollas plana en plata ley italiana, dos piezas que llevan consigo la huella de un mismo vínculo.",
+                imagenes: ["imagenes/plana.png"]
+            },
+            {,
+                id: "an-04", nombre: "ARGOLLAS PLANAS CLÁSICAS", categoriaDOM: "anillos", disponible: true, materiales: "Plata Esterlina", precio: 439900,
+                descripcion: "Una argollas plana en plata ley italiana, dos piezas que llevan consigo la huella de un mismo vínculo.",
                 imagenes: ["imagenes/plana.png", "imagenes/plana4.png", "imagenes/plana1.png", "imagenes/plana3.PNG"]
             },
             {
-                id: "an-02", nombre: "ARGOLLAS MEDIA CAÑA CLÁSICAS", categoriaDOM: "anillos", disponible: true,materiales: "Enteramente Plata", precio: 386600,
-                descripcion: "Argollas media caña en plata ley italiana, suaves en su forma y luminosas en cada giro.",
-                imagenes: ["imagenes/mediac.png", "imagenes/mediac1.png", "imagenes/mediac2.png", "imagenes/mediac3.png"]
-            },
-            {
-                id: "an-03", nombre: "CLÁSICA MEDIA CAÑA", categoriaDOM: "anillos", disponible: true,materiales: "Enteramente Plata", precio: 197000,
+                id: "an-05", nombre: "ARGOLLA ENTORCHADA", categoriaDOM: "anillos", disponible: true,materiales: "Enteramente Plata", precio: 304900,
                 descripcion: "Una argolla clásica media caña en plata ley italiana, una curva continua que abraza la luz con cada movimiento.",
-                imagenes: ["imagenes/clasica.png", "imagenes/clasica1.png", "imagenes/clasica2.png"]
+                imagenes: []
+            },
+                {
+                id: "an-06", nombre: "ARGOLLAS ENTORCHADAS", categoriaDOM: "anillos", disponible: true,materiales: "Enteramente Plata", precio: 439900,
+                descripcion: "Una argolla clásica media caña en plata ley italiana, una curva continua que abraza la luz con cada movimiento.",
+                imagenes: []
             },
             {
-                id: "an-04", nombre: "TEXTURIZADA", categoriaDOM: "anillos", disponible: false, materiales: "Enteramente Plata", precio: 140000,
+                id: "an-07", nombre: "ARGOLLA TRES CUERDAS", categoriaDOM: "anillos", disponible: false, materiales: "Enteramente Plata", precio: 304900,
+                descripcion: "Argolla que refleja el irrompible cordón de tres dobleces",
+                imagenes: []
+            },
+            {
+                id: "an-08", nombre: "ARGOLLAS TRES CUERDAS", categoriaDOM: "anillos", disponible: false, materiales: "Enteramente Plata", precio: 439900,
+                descripcion: "Dos argollas que refleja el irrompible cordón de tres dobleces",
+                imagenes: []
+            },
+             {
+                id: "an-09", nombre: "ARGOLLA MARTILLADA", categoriaDOM: "anillos", disponible: false, materiales: "Enteramente Plata", precio: 304900,
+                descripcion: "Dos argollas que refleja el irrompible cordón de tres dobleces",
+                imagenes: []
+            },
+            {
+                id: "an-10", nombre: "TEXTURIZADA", categoriaDOM: "anillos", disponible: false, materiales: "Enteramente Plata", precio: 354900,
                 descripcion: "Argolla con texturas inspiradas en la belleza precolombina.",
                 imagenes: ["imagenes/epla.png", "imagenes/epla1.png", "imagenes/epla2.png"]
             },
             {
-                id: "an-05", nombre: "HOJAS", categoriaDOM: "anillos", disponible: true,materiales: "Enteramente Plata", precio: 290000,
+                id: "an-11", nombre: "HOJAS", categoriaDOM: "anillos", disponible: true,materiales: "Enteramente Plata", precio: 416000,
                 descripcion: "La naturaleza en tus manos, hojas talladas una a una por espléndidos orfebres.",
                 imagenes: ["imagenes/hoja.png", "imagenes/hoja1.png", "imagenes/hoja2.png"]
             },
             {
-                id: "an-06", nombre: "LAZO INFINITO", categoriaDOM: "anillos", disponible: true,materiales: "Engaste en Canal / Circón", precio: 160000,
+                id: "an-12", nombre: "ARGOLLA LAZO INFINITO", categoriaDOM: "anillos", disponible: true,materiales: "Engaste en Canal / Circón", precio: 456600,
                 descripcion: "Lazo delicado de una sola pieza de plata esterlina que abraza un circón suizo.",
                 imagenes: ["imagenes/lazo.png", "imagenes/lazo1.png", "imagenes/lazo2.png"]
             },
             {
-                id: "an-07", nombre: "AGUA MINERALE", categoriaDOM: "anillos", disponible: true,materiales: "Engaste en Canal", precio: 180000,
+                id: "an-13", nombre: "AGUA MINERALE", categoriaDOM: "anillos", disponible: true,materiales: "Engaste en Canal", precio: 483600,
                 descripcion: "Piedra talla marquise flotante entre dos láminas uniformes de plata esterlina.",
                 imagenes: ["imagenes/agua.png", "imagenes/agua1.png", "imagenes/agua2.png"]
             },
             {
-                id: "an-08", nombre: "PUENTE AZUL", categoriaDOM: "anillos", disponible: true,materiales: "Engaste en Canal", precio: 200000,
+                id: "an-14", nombre: "PUENTE AZUL", categoriaDOM: "anillos", disponible: true,materiales: "Engaste en Canal", precio: 604900,
                 descripcion: "Engaste seguro y limpio para lucir hermosos circones azul zafiro.",
                 imagenes: ["imagenes/azul.png", "imagenes/azul1.png", "imagenes/azul2.png"]
             },
@@ -211,17 +239,17 @@
             
             // CATEGORÍA: COLLARES (Filtro: cuello)
             {
-                id: "col-01", nombre: "VENTANA SUBMARINA", categoriaDOM: "cuello", disponible: true,materiales: "Plata 925 / Acrílico Ámbar", precio: 385000,
+                id: "col-01", nombre: "VENTANA SUBMARINA", categoriaDOM: "cuello", disponible: true,materiales: "Plata 925 / Acrílico Ámbar", precio: 631700,
                 descripcion: "Un marco de plata ley italiana, firme y brillante, rodea un disco de acrílico amarillo donde la luz se detiene. Colgada de tu cuello, es una ventana pequeña que te deja asomarte a otra profundidad.",
                 imagenes: ["imagenes/sub.png", "imagenes/sub1.png"]
             },
             {
-                id: "col-02", nombre: "VENTANA DE AMOR", categoriaDOM: "cuello", disponible: true,materiales: "Plata 925 / Acrílico", precio: 358000,
+                id: "col-02", nombre: "VENTANA DE AMOR", categoriaDOM: "cuello", disponible: true,materiales: "Plata 925 / Acrílico", precio: 716600,
                 descripcion: "Enmarcado en plata de ley italiana, un corazón acrílico rojo, con remaches y mirada de submarino donde la originalidad y la alta joyería se mezclan",
                 imagenes: ["imagenes/cor1.png", "imagenes/cor.png"] 
             },
             {
-                id: "col-03", nombre: "PERLA MAR EN TU CUELLO", categoriaDOM: "cuello", disponible: true,materiales: "Plata 925 / Acrílico", precio: 210000,
+                id: "col-03", nombre: "PERLA MAR EN TU CUELLO", categoriaDOM: "cuello", disponible: true,materiales: "Plata 925 / Acrílico", precio: 434900,
                 descripcion: "Diseño único inspirado en el proceso que lleva al nacimiento de una hermosa perla.",
                 imagenes: ["imagenes/perla.png", "imagenes/perla1.png"]
             },
