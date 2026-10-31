@@ -28,7 +28,7 @@
         
         .galeria-principal { 
             width: 100%; 
-            height: 500px; /* Fija la altura para que no brinque */
+            height: 500px;
             background-color: #f2ece4; 
             margin-bottom: 15px; 
             overflow: hidden; 
@@ -43,7 +43,6 @@
             object-fit: contain; 
             transition: var(--transicion); 
         }
-        .miniaturas img { width: 80px; height: 80px; object-fit: contain; padding: 4px; cursor: pointer; border-radius: 4px; border: 2px solid transparent; transition: var(--transicion); background-color: #f2ece4; }
         .miniaturas { display: flex; gap: 15px; flex-wrap: wrap; }
         .miniaturas img { width: 80px; height: 80px; object-fit: cover; cursor: pointer; border-radius: 4px; border: 2px solid transparent; transition: var(--transicion); background-color: #f2ece4; }
         .miniaturas img:hover { border-color: var(--color-dorado); }
@@ -69,23 +68,22 @@
         .detalles-extra { border-top: 1px solid rgba(0,0,0,0.1); padding-top: 20px; font-size: 13px; color: var(--texto-suave); }
         
         @media (max-width: 768px) {
-            .producto-container { 
-                grid-template-columns: 1fr; /* Obliga a usar una sola columna */
-                gap: 30px; /* Reduce el espacio entre las fotos y el título */
-            }
+            .producto-container { grid-template-columns: 1fr; gap: 30px; }
             .galeria-principal { height: 350px; }
-            .miniaturas { justify-content: center; } /* Centra los cuadritos de abajo */
+            .miniaturas { justify-content: center; } 
         }
         
         /* ESTILOS DEL CARRITO COMPARTIDO */
         .cart-trigger { position: fixed; bottom: 30px; right: 30px; background-color: var(--color-cafe); color: var(--blanco-puro); padding: 16px 24px; text-transform: uppercase; letter-spacing: 2px; font-size: 10px; cursor: pointer; z-index: 1000; display: flex; align-items: center; gap: 12px; transition: 0.4s; }
-        .drawer-carrito { position: fixed; top: 0; right: -100%; width: 100%; max-width: 420px; height: 100%; background-color: var(--blanco-puro); box-shadow: -10px 0 40px rgba(0,0,0,0.08); z-index: 2000; transition: right 0.6s; display: flex; flex-direction: column; padding: 40px; }
+        .cart-trigger:hover { background-color: var(--color-dorado); transform: translateY(-3px); }
+        .drawer-carrito { position: fixed; top: 0; right: -100%; width: 100%; max-width: 420px; height: 100%; background-color: var(--blanco-puro); box-shadow: -10px 0 40px rgba(0,0,0,0.08); z-index: 2000; transition: right 0.6s cubic-bezier(0.25, 1, 0.5, 1); display: flex; flex-direction: column; padding: 40px; }
         .drawer-carrito.is-open { right: 0; }
         .drawer-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 20px; margin-bottom: 20px; }
-        .btn-close { background: none; border: none; font-size: 28px; cursor: pointer; }
-        .cart-body { flex: 1; overflow-y: auto; }
-        .cart-item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #f9f9f9; font-size: 12px; }
+        .btn-close { background: none; border: none; font-size: 28px; cursor: pointer; color: var(--texto-suave); }
+        .cart-body { flex: 1; overflow-y: auto; padding-right: 10px; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #f9f9f9; font-size: 12px; }
         .btn-checkout { background-color: var(--color-cafe); color: var(--blanco-puro); width: 100%; padding: 15px; border: none; text-transform: uppercase; letter-spacing: 2px; font-size: 10px; cursor: pointer; transition: 0.3s; margin-top:20px; }
+        .btn-checkout:hover { background-color: var(--color-dorado); }
     </style>
 </head>
 <body>
@@ -113,7 +111,6 @@
         <div class="producto-info">
             <h1 id="prod-title">Cargando Pieza...</h1>
             <div class="sku-dispo">
-                <!-- AQUÍ AGREGAMOS EL ID AL ESTADO -->
                 <span>SKU: <span id="prod-sku">---</span></span> | <span id="prod-estado" style="color: #28a745;">Disponible</span>
             </div>
             
@@ -129,7 +126,6 @@
                     <input type="number" id="cantidad-input" value="1" readonly>
                     <button onclick="cambiarCantidad(1)">+</button>
                 </div>
-                <!-- AQUÍ AGREGAMOS EL ID AL BOTÓN DE COMPRA -->
                 <button id="btn-comprar" class="btn-primario" onclick="agregarAlCarrito()">Comprar Ahora</button>
             </div>
 
@@ -153,11 +149,11 @@
 
     <aside class="drawer-carrito" id="cart-drawer">
         <div class="drawer-header">
-            <h2 style="font-size: 24px;">Tu Selección</h2>
+            <h2 style="font-size: 24px; font-family: 'Cormorant Garamond', serif;">Tu Selección</h2>
             <button class="btn-close" onclick="toggleCart()">&times;</button>
         </div>
         <div class="cart-body" id="cart-items-container"></div>
-        <div class="cart-total" style="display: flex; justify-content: space-between; font-weight: 500; font-size: 16px; margin-top: 20px;">
+        <div class="cart-total" style="display: flex; justify-content: space-between; font-weight: 500; font-size: 16px; margin-top: 20px; font-family: 'Cormorant Garamond', serif;">
             <span>Subtotal</span><span id="cart-total-price">$0 COP</span>
         </div>
         <button class="btn-checkout" onclick="initCheckout()">Finalizar Compra</button>
@@ -183,11 +179,12 @@
             { id: "col-01", nombre: "VENTANA SUBMARINA", materiales: "Plata 925 / Acrílico Ámbar", precio: 385000, descripcion: "Un marco de plata ley italiana, firme y brillante, rodea un disco de acrílico amarillo donde la luz se detiene. Colgada de tu cuello, es una ventana pequeña que te deja asomarte a otra profundidad.", imagenes: ["imagenes/sub.png", "imagenes/sub1.png"] },
             { id: "col-02", nombre: "VENTANA DE AMOR", materiales: "Plata 925 / Acrílico", precio: 210000, descripcion: "Enmarcado en plata de ley italiana, un corazón acrílico rojo, con remaches y mirada de submarino donde la originalidad y la alta joyería se mezclan", imagenes: ["imagenes/cor.png", "imagenes/cor1.png"] },
             { id: "col-03", nombre: "PERLA MAR EN TU CUELLO", materiales: "Plata 925 / Acrílico", precio: 210000, descripcion: "Diseño único inspirado en el proceso que lleva al nacimiento de una hermosa perla.", imagenes: ["imagenes/perla.png", "imagenes/perla1.png"] },
-            { id: "brz-777", nombre: "BRAZALETE 777", materiales: "Plata 925 / Acrílico", precio: 280000, descripcion: "Refuerza la idea de perfección. Centro de acrílico amarillo con fuertes remaches y broche de seguridad.", imagenes: ["imagenes/777.png"] }, 
+            { id: "brz-777", nombre: "BRAZALETE 777", disponible: false, materiales: "Plata 925 / Acrílico", precio: 280000, descripcion: "Refuerza la idea de perfección. Centro de acrílico amarillo con fuertes remaches y broche de seguridad.", imagenes: ["imagenes/777.png"] }, 
         ];
 
         // 2. MAGIA DINÁMICA: Leer la URL para saber qué pieza mostrar
         let productoActual = null;
+        let cart = JSON.parse(localStorage.getItem('ambarino_cart')) || [];
         
         window.onload = () => {
             const params = new URLSearchParams(window.location.search);
@@ -195,36 +192,32 @@
             productoActual = catalogo.find(p => p.id === idProducto);
 
             if(productoActual) {
-                // Llenar textos
                 document.getElementById('prod-title').innerText = productoActual.nombre;
                 document.getElementById('prod-sku').innerText = productoActual.id;
                 document.getElementById('prod-desc').innerText = productoActual.descripcion;
                 document.getElementById('prod-mat').innerText = "✓ Material: " + productoActual.materiales;
                 document.getElementById('prod-price').innerText = "$" + productoActual.precio.toLocaleString('es-CO');
                 
-                // AQUÍ AGREGAMOS LA LÓGICA DE INVENTARIO
                 const estadoUI = document.getElementById('prod-estado');
                 const btnComprar = document.getElementById('btn-comprar');
                 
                 if (productoActual.disponible === false) {
                     estadoUI.innerText = "Agotado";
-                    estadoUI.style.color = "#a34141"; // Color rojo
+                    estadoUI.style.color = "#a34141";
                     btnComprar.innerText = "Pieza Agotada";
                     btnComprar.style.backgroundColor = "#e0e0e0";
                     btnComprar.style.borderColor = "#e0e0e0";
                     btnComprar.style.color = "#888";
                     btnComprar.style.cursor = "not-allowed";
-                    btnComprar.onclick = null; // Bloquea el clic
+                    btnComprar.onclick = null; 
                 } else {
                     estadoUI.innerText = "Disponible";
-                    estadoUI.style.color = "#28a745"; // Color verde
+                    estadoUI.style.color = "#28a745"; 
                 }
 
-                // Configurar WhatsApp
                 const mensajeWa = `Hola, quiero más información sobre la pieza: ${productoActual.nombre} (SKU: ${productoActual.id})`;
                 document.getElementById('btn-wa').href = `https://wa.me/573219659337?text=${encodeURIComponent(mensajeWa)}`;
 
-                // Llenar Imágenes
                 document.getElementById('imagen-principal').src = productoActual.imagenes[0];
                 const contMini = document.getElementById('contenedor-miniaturas');
                 productoActual.imagenes.forEach(img => {
@@ -245,7 +238,6 @@
         }
 
         // 3. LÓGICA DEL CARRITO
-        let cart = JSON.parse(localStorage.getItem('ambarino_cart')) || [];
         function toggleCart() { document.getElementById('cart-drawer').classList.toggle('is-open'); }
 
         function agregarAlCarrito() {
@@ -287,69 +279,9 @@
                 container.innerHTML += `
                     <div class="cart-item">
                         <div>
-                            <strong>${item.name}</strong>
-                            <span style="display:block; font-size:10px; opacity: 0.7;">${item.quantity} x $${item.price.toLocaleString('es-CO')}</span>
-                            <button onclick="removeFromCart('${item.id}')" style="background:none; border:none; color:#a34141; cursor:pointer; font-size:9px; text-decoration:underline;">Eliminar</button>
-                        </div>
-                        <div style="font-weight: 500;">$${lineTotal.toLocaleString('es-CO')}</div>
-                    </div>
-                `;
-            });
-            counter.innerText = totalItems;
-            totalUI.innerText = `$${totalPrice.toLocaleString('es-CO')} COP`;
-        }
-    </script>
-    <script>
-        // LÓGICA DE CARRITO CON MEMORIA (LOCAL STORAGE)
-        let cart = JSON.parse(localStorage.getItem('ambarino_cart')) || [];
-
-        document.addEventListener('DOMContentLoaded', () => { renderCart(); });
-
-        function toggleCart() { document.getElementById('cart-drawer').classList.toggle('is-open'); }
-
-        function addToCart(id, name, price) {
-            const existingItemIndex = cart.findIndex(item => item.id === id);
-            if (existingItemIndex > -1) {
-                cart[existingItemIndex].quantity += 1;
-            } else {
-                cart.push({ id, name, price, quantity: 1 });
-            }
-            localStorage.setItem('ambarino_cart', JSON.stringify(cart));
-            renderCart();
-            document.getElementById('cart-drawer').classList.add('is-open');
-        }
-
-        function removeFromCart(id) {
-            cart = cart.filter(item => item.id !== id);
-            localStorage.setItem('ambarino_cart', JSON.stringify(cart));
-            renderCart();
-        }
-
-        function renderCart() {
-            const container = document.getElementById('cart-items-container');
-            const counter = document.getElementById('cart-counter');
-            const totalUI = document.getElementById('cart-total-price');
-            
-            container.innerHTML = '';
-            
-            if (cart.length === 0) {
-                container.innerHTML = '<p style="text-align:center; opacity:0.5; font-size:11px; margin-top: 50px;">Bolsa vacía.</p>';
-                counter.innerText = '0';
-                totalUI.innerText = '$0 COP';
-                return;
-            }
-
-            let totalItems = 0; let totalPrice = 0;
-            cart.forEach(item => {
-                totalItems += item.quantity;
-                let lineTotal = item.price * item.quantity;
-                totalPrice += lineTotal;
-                container.innerHTML += `
-                    <div class="cart-item">
-                        <div>
-                            <strong>${item.name}</strong>
-                            <span style="color:var(--texto-suave); display:block; font-size:10px;">${item.quantity} x $${item.price.toLocaleString('es-CO')}</span>
-                            <button class="btn-remove" onclick="removeFromCart('${item.id}')">Eliminar</button>
+                            <strong style="display:block; margin-bottom:4px;">${item.name}</strong>
+                            <span style="color:var(--texto-suave); font-size:10px;">${item.quantity} x $${item.price.toLocaleString('es-CO')}</span>
+                            <button onclick="removeFromCart('${item.id}')" style="background:none; border:none; color:#a34141; cursor:pointer; font-size:9px; text-decoration:underline; display:block; margin-top:6px;">Eliminar</button>
                         </div>
                         <div style="font-weight: 500;">$${lineTotal.toLocaleString('es-CO')}</div>
                     </div>
@@ -359,12 +291,12 @@
             totalUI.innerText = `$${totalPrice.toLocaleString('es-CO')} COP`;
         }
 
+        // 4. PASARELA DE PAGOS
         function initCheckout() {
             if (cart.length === 0) return;
             const totalAmount = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
             const cartDescription = cart.map(item => `${item.quantity}x ${item.name}`).join(' | ');
 
-            // ¡Pega tu llave pública de ePayco aquí abajo!
             var handler = ePayco.checkout.configure({ key: 'f2acf1482aa1614b4e5f3ce51372bf8d', test: true });
             
             handler.open({
