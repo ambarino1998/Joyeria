@@ -74,6 +74,17 @@
         .btn-checkout { background-color: var(--color-cafe); color: var(--blanco-puro); width: 100%; padding: 15px; border: none; text-transform: uppercase; letter-spacing: 2px; font-size: 10px; cursor: pointer; transition: 0.3s; }
         .btn-checkout:hover { background-color: var(--color-dorado); }
         
+        /* Modal Tallas */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(26, 20, 16, 0.6); display: flex; justify-content: center; align-items: center; z-index: 3000; opacity: 0; visibility: hidden; transition: var(--transicion); backdrop-filter: blur(3px); }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-content { background: var(--bg-marfil); padding: 40px; max-width: 400px; width: 90%; position: relative; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.1); border: 1px solid rgba(194, 162, 106, 0.2); }
+        .modal-close { position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; color: var(--texto-suave); border: none; background: none; }
+        #modal-nombre-producto { font-size: 24px; margin-bottom: 10px; }
+        #modal-precio-producto { font-size: 18px; color: var(--color-dorado); margin-bottom: 20px; }
+        .modal-select-wrapper { margin-bottom: 25px; text-align: left; }
+        .modal-select-wrapper label { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: var(--texto-suave); display: block; margin-bottom: 8px; }
+        #modal-selector-talla { width: 100%; padding: 12px; border: 1px solid rgba(194, 162, 106, 0.4); background: transparent; font-family: 'Montserrat', sans-serif; font-size: 12px; color: var(--color-cafe); outline: none; }
+        
         footer { border-top: 1px solid rgba(194, 162, 106, 0.2); padding: 50px 5%; display: flex; justify-content: space-between; align-items: center; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: var(--texto-suave); }
         @media (max-width: 768px) { nav { display: none; } .filtro-container { justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 5px;} }
     </style>
@@ -109,7 +120,23 @@
         </div>
     </main>
 
-    <!-- UI Carrito Compartido -->
+    <!-- Modal para Selección de Tallas -->
+    <div class="modal-overlay" id="modal-tallas">
+        <div class="modal-content">
+            <button class="modal-close" onclick="cerrarModal()">&times;</button>
+            <h3 id="modal-nombre-producto">Nombre</h3>
+            <p id="modal-precio-producto">$0 COP</p>
+            
+            <div class="modal-select-wrapper">
+                <label for="modal-selector-talla">Selecciona tu talla:</label>
+                <select id="modal-selector-talla"></select>
+            </div>
+            
+            <button class="btn-checkout" id="btn-agregar-modal">Agregar a la Bolsa</button>
+        </div>
+    </div>
+
+    <!-- UI Carrito -->
     <div class="cart-trigger" onclick="toggleCart()">
         <span>Mi Bolsa</span>
         <span class="cart-count" id="cart-counter">0</span>
@@ -120,27 +147,9 @@
             <h2 style="font-size: 24px;">Tu Selección</h2>
             <button class="btn-close" onclick="toggleCart()">&times;</button>
         </div>
-        
         <div class="cart-body" id="cart-items-container"></div>
-
-        <!-- SECCIÓN DE ENVÍO AGREGADA -->
-        <div id="opciones-envio" style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px; display: none;">
-            <p style="font-size: 11px; font-weight: bold; margin-bottom: 10px; letter-spacing: 1px; color: var(--texto-suave);">MÉTODO DE ENTREGA</p>
-            <label style="display: block; font-size: 12px; margin-bottom: 5px; cursor: pointer;">
-                <input type="radio" name="tipo_envio" value="recogida" checked onchange="actualizarEnvio()">
-                Recoger en el Estudio (Gratis)
-            </label>
-            <label style="display: block; font-size: 12px; margin-bottom: 10px; cursor: pointer;">
-                <input type="radio" name="tipo_envio" value="domicilio" onchange="actualizarEnvio()">
-                Envío Nacional ($15.000 COP)
-            </label>
-            <div id="campo-direccion" style="display: none;">
-                <input type="text" id="direccion-input" placeholder="Escribe tu Dirección, Barrio y Ciudad..." style="width: 100%; padding: 10px; font-size: 11px; border: 1px solid var(--color-cafe); font-family: 'Montserrat', sans-serif;">
-            </div>
-        </div>
-
         <div class="cart-footer">
-            <div class="cart-total"><span>Total a Pagar</span><span id="cart-total-price">$0 COP</span></div>
+            <div class="cart-total"><span>Subtotal</span><span id="cart-total-price">$0 COP</span></div>
             <button class="btn-checkout" onclick="initCheckout()">Finalizar Compra</button>
         </div>
     </aside>
@@ -151,89 +160,102 @@
     </footer>
 
     <script>
-        // BASE DE DATOS DE AMBARINO 1998 (Precios Referenciales Agregados)
+        // BASE DE DATOS CON TALLAS Y PRECIOS DINÁMICOS
         const catalogo = [
-            // CATEGORÍA: ANILLOS (Filtro: anillos)
             {
-                id: "an-01", nombre: "ARGOLLA CLÁSICA MEDIA CAÑA", categoriaDOM: "anillos", disponible: true,materiales: "Enteramente Plata", precio: 304900,
-                descripcion: "Una argolla clásica media caña en plata ley italiana, una curva continua que abraza la luz con cada movimiento.",
-                imagenes: ["imagenes/clasica.png", "imagenes/clasica1.png", "imagenes/clasica2.png"]
+                id: "an-01", nombre: "ARGOLLA CLÁSICA MEDIA CAÑA", categoriaDOM: "anillos", disponible: true, materiales: "Enteramente Plata", precio: 304900,
+                descripcion: "Una argolla clásica media caña en plata ley italiana...",
+                imagenes: ["imagenes/clasica.png", "imagenes/clasica1.png", "imagenes/clasica2.png"],
+                tallas: [{talla:"4",precio:304900}, {talla:"4.5",precio:304900}, {talla:"5",precio:320900}, {talla:"5.5",precio:320900}, {talla:"6",precio:304900}, {talla:"6.5",precio:304900}, {talla:"7",precio:304900}, {talla:"7.5",precio:304900}, {talla:"8",precio:304900}, {talla:"8.5",precio:304900}, {talla:"9",precio:304900}, {talla:"9.5",precio:304900}, {talla:"10",precio:100000}, {talla:"10.5",precio:100000}, {talla:"11",precio:100000}, {talla:"11.5",precio:100000}, {talla:"12",precio:100000}, {talla:"12.5",precio:100000}, {talla:"13",precio:100000}]
             },
             {
-                id: "an-02", nombre: "ARGOLLAS CLÁSICAS MEDIA CAÑA", categoriaDOM: "anillos", disponible: true,materiales: "Enteramente Plata", precio: 439900,
-                descripcion: "Dos argollas media caña en plata ley italiana, suaves en su forma y luminosas en cada giro.",
-                imagenes: ["imagenes/mediac.png", "imagenes/mediac1.png", "imagenes/mediac2.png", "imagenes/mediac3.png"]
+                id: "an-02", nombre: "ARGOLLAS CLÁSICAS MEDIA CAÑA", categoriaDOM: "anillos", disponible: true, materiales: "Enteramente Plata", precio: 439900,
+                descripcion: "Dos argollas media caña en plata ley italiana...",
+                imagenes: ["imagenes/mediac.png", "imagenes/mediac1.png", "imagenes/mediac2.png", "imagenes/mediac3.png"],
+                tallas: [{talla:"4",precio:439900}, {talla:"4.5",precio:439900}, {talla:"5",precio:439900}, {talla:"5.5",precio:439900}, {talla:"6",precio:439900}, {talla:"6.5",precio:439900}, {talla:"7",precio:439900}, {talla:"7.5",precio:439900}, {talla:"8",precio:439900}, {talla:"8.5",precio:439900}, {talla:"9",precio:439900}, {talla:"9.5",precio:439900}, {talla:"10",precio:100000}, {talla:"10.5",precio:100000}, {talla:"11",precio:100000}, {talla:"11.5",precio:100000}, {talla:"12",precio:100000}, {talla:"12.5",precio:100000}, {talla:"13",precio:100000}]
             },
             {
                 id: "an-03", nombre: "ARGOLLA PLANA CLÁSICA", categoriaDOM: "anillos", disponible: true, materiales: "Plata Esterlina", precio: 304900,
-                descripcion: "Una argollas plana en plata ley italiana, dos piezas que llevan consigo la huella de un mismo vínculo.",
-                imagenes: ["imagenes/plana.png"]
+                descripcion: "Una argolla plana en plata ley italiana...",
+                imagenes: ["imagenes/plana.png"],
+                tallas: [{talla:"4",precio:304900}, {talla:"4.5",precio:304900}, {talla:"5",precio:304900}, {talla:"5.5",precio:304900}, {talla:"6",precio:304900}, {talla:"6.5",precio:304900}, {talla:"7",precio:304900}, {talla:"7.5",precio:304900}, {talla:"8",precio:304900}, {talla:"8.5",precio:304900}, {talla:"9",precio:304900}, {talla:"9.5",precio:304900}, {talla:"10",precio:100000}, {talla:"10.5",precio:100000}, {talla:"11",precio:100000}, {talla:"11.5",precio:100000}, {talla:"12",precio:100000}, {talla:"12.5",precio:100000}, {talla:"13",precio:100000}]
             },
             {
                 id: "an-04", nombre: "ARGOLLAS PLANAS CLÁSICAS", categoriaDOM: "anillos", disponible: true, materiales: "Plata Esterlina", precio: 439900,
-                descripcion: "Una argollas plana en plata ley italiana, dos piezas que llevan consigo la huella de un mismo vínculo.",
-                imagenes: ["imagenes/plana.png", "imagenes/plana4.png", "imagenes/plana1.png", "imagenes/plana3.PNG"]
+                descripcion: "Dos argollas planas en plata ley italiana...",
+                imagenes: ["imagenes/plana.png", "imagenes/plana4.png", "imagenes/plana1.png", "imagenes/plana3.PNG"],
+                tallas: [{talla:"4",precio:439900}, {talla:"4.5",precio:439900}, {talla:"5",precio:439900}, {talla:"5.5",precio:439900}, {talla:"6",precio:439900}, {talla:"6.5",precio:439900}, {talla:"7",precio:439900}, {talla:"7.5",precio:439900}, {talla:"8",precio:439900}, {talla:"8.5",precio:439900}, {talla:"9",precio:439900}, {talla:"9.5",precio:439900}, {talla:"10",precio:100000}, {talla:"10.5",precio:100000}, {talla:"11",precio:100000}, {talla:"11.5",precio:100000}, {talla:"12",precio:100000}, {talla:"12.5",precio:100000}, {talla:"13",precio:100000}]
             },
             {
-                id: "an-05", nombre: "ARGOLLA ENTORCHADA", categoriaDOM: "anillos", disponible: true,materiales: "Enteramente Plata", precio: 304900,
-                descripcion: "Una argolla clásica media caña en plata ley italiana, una curva continua que abraza la luz con cada movimiento.",
-                imagenes: []
+                id: "an-05", nombre: "ARGOLLA ENTORCHADA", categoriaDOM: "anillos", disponible: true, materiales: "Enteramente Plata", precio: 304900,
+                descripcion: "Una argolla entorchada en plata ley italiana...",
+                imagenes: [],
+                tallas: [{talla:"4",precio:304900}, {talla:"4.5",precio:304900}, {talla:"5",precio:304900}, {talla:"5.5",precio:304900}, {talla:"6",precio:304900}, {talla:"6.5",precio:304900}, {talla:"7",precio:304900}, {talla:"7.5",precio:304900}, {talla:"8",precio:304900}, {talla:"8.5",precio:304900}, {talla:"9",precio:304900}, {talla:"9.5",precio:304900}, {talla:"10",precio:100000}, {talla:"10.5",precio:100000}, {talla:"11",precio:100000}, {talla:"11.5",precio:100000}, {talla:"12",precio:100000}, {talla:"12.5",precio:100000}, {talla:"13",precio:100000}]
             },
-                {
-                id: "an-06", nombre: "ARGOLLAS ENTORCHADAS", categoriaDOM: "anillos", disponible: true,materiales: "Enteramente Plata", precio: 439900,
-                descripcion: "Una argolla clásica media caña en plata ley italiana, una curva continua que abraza la luz con cada movimiento.",
-                imagenes: []
+            {
+                id: "an-06", nombre: "ARGOLLAS ENTORCHADAS", categoriaDOM: "anillos", disponible: true, materiales: "Enteramente Plata", precio: 439900,
+                descripcion: "Dos argollas entorchadas en plata ley italiana...",
+                imagenes: [],
+                tallas: [{talla:"4",precio:439900}, {talla:"4.5",precio:439900}, {talla:"5",precio:439900}, {talla:"5.5",precio:439900}, {talla:"6",precio:439900}, {talla:"6.5",precio:439900}, {talla:"7",precio:439900}, {talla:"7.5",precio:439900}, {talla:"8",precio:439900}, {talla:"8.5",precio:439900}, {talla:"9",precio:439900}, {talla:"9.5",precio:439900}, {talla:"10",precio:100000}, {talla:"10.5",precio:100000}, {talla:"11",precio:100000}, {talla:"11.5",precio:100000}, {talla:"12",precio:100000}, {talla:"12.5",precio:100000}, {talla:"13",precio:100000}]
             },
             {
                 id: "an-07", nombre: "ARGOLLA TRES CUERDAS", categoriaDOM: "anillos", disponible: false, materiales: "Enteramente Plata", precio: 304900,
-                descripcion: "Argolla que refleja el irrompible cordón de tres dobleces",
-                imagenes: []
+                descripcion: "Una argolla que refleja el irrompible cordón de tres dobleces.",
+                imagenes: [],
+                tallas: [{talla:"4",precio:304900}, {talla:"4.5",precio:304900}, {talla:"5",precio:304900}, {talla:"5.5",precio:304900}, {talla:"6",precio:304900}, {talla:"6.5",precio:304900}, {talla:"7",precio:304900}, {talla:"7.5",precio:304900}, {talla:"8",precio:304900}, {talla:"8.5",precio:304900}, {talla:"9",precio:304900}, {talla:"9.5",precio:304900}, {talla:"10",precio:100000}, {talla:"10.5",precio:100000}, {talla:"11",precio:100000}, {talla:"11.5",precio:100000}, {talla:"12",precio:100000}, {talla:"12.5",precio:100000}, {talla:"13",precio:100000}]
             },
             {
                 id: "an-08", nombre: "ARGOLLAS TRES CUERDAS", categoriaDOM: "anillos", disponible: false, materiales: "Enteramente Plata", precio: 439900,
-                descripcion: "Dos argollas que refleja el irrompible cordón de tres dobleces",
-                imagenes: []
+                descripcion: "Dos argollas que reflejan el irrompible cordón de tres dobleces.",
+                imagenes: [],
+                tallas: [{talla:"4",precio:439900}, {talla:"4.5",precio:439900}, {talla:"5",precio:439900}, {talla:"5.5",precio:439900}, {talla:"6",precio:439900}, {talla:"6.5",precio:439900}, {talla:"7",precio:439900}, {talla:"7.5",precio:439900}, {talla:"8",precio:439900}, {talla:"8.5",precio:439900}, {talla:"9",precio:439900}, {talla:"9.5",precio:439900}, {talla:"10",precio:100000}, {talla:"10.5",precio:100000}, {talla:"11",precio:100000}, {talla:"11.5",precio:100000}, {talla:"12",precio:100000}, {talla:"12.5",precio:100000}, {talla:"13",precio:100000}]
             },
-             {
+            {
                 id: "an-09", nombre: "ARGOLLA CRÁTER DE LUNA", categoriaDOM: "anillos", disponible: false, materiales: "Enteramente Plata", precio: 304900,
-                descripcion: "Argolla inspirada en la irregularidad armoniosa de la luna",
-                imagenes: []
+                descripcion: "Argolla inspirada en la irregularidad armoniosa de la luna.",
+                imagenes: [],
+                tallas: [{talla:"4",precio:304900}, {talla:"4.5",precio:304900}, {talla:"5",precio:304900}, {talla:"5.5",precio:304900}, {talla:"6",precio:304900}, {talla:"6.5",precio:304900}, {talla:"7",precio:304900}, {talla:"7.5",precio:304900}, {talla:"8",precio:304900}, {talla:"8.5",precio:304900}, {talla:"9",precio:304900}, {talla:"9.5",precio:304900}, {talla:"10",precio:100000}, {talla:"10.5",precio:100000}, {talla:"11",precio:100000}, {talla:"11.5",precio:100000}, {talla:"12",precio:100000}, {talla:"12.5",precio:100000}, {talla:"13",precio:100000}]
             },
             {
                 id: "an-10", nombre: "TEXTURIZADA", categoriaDOM: "anillos", disponible: false, materiales: "Enteramente Plata", precio: 354900,
                 descripcion: "Argolla con texturas inspiradas en la belleza precolombina.",
-                imagenes: ["imagenes/epla.png", "imagenes/epla1.png", "imagenes/epla2.png"]
+                imagenes: ["imagenes/epla.png", "imagenes/epla1.png", "imagenes/epla2.png"],
+                tallas: [{talla:"4",precio:354900}, {talla:"4.5",precio:354900}, {talla:"5",precio:354900}, {talla:"5.5",precio:354900}, {talla:"6",precio:354900}, {talla:"6.5",precio:354900}, {talla:"7",precio:354900}, {talla:"7.5",precio:354900}, {talla:"8",precio:354900}, {talla:"8.5",precio:354900}, {talla:"9",precio:354900}, {talla:"9.5",precio:354900}, {talla:"10",precio:100000}, {talla:"10.5",precio:100000}, {talla:"11",precio:100000}, {talla:"11.5",precio:100000}, {talla:"12",precio:100000}, {talla:"12.5",precio:100000}, {talla:"13",precio:100000}]
             },
             {
-                id: "an-11", nombre: "HOJAS", categoriaDOM: "anillos", disponible: true,materiales: "Enteramente Plata", precio: 416000,
-                descripcion: "La naturaleza en tus manos, hojas talladas una a una por espléndidos orfebres.",
-                imagenes: ["imagenes/hoja.png", "imagenes/hoja1.png", "imagenes/hoja2.png"]
+                id: "an-11", nombre: "HOJAS", categoriaDOM: "anillos", disponible: true, materiales: "Enteramente Plata", precio: 416000,
+                descripcion: "La naturaleza en tus manos, hojas talladas una a una...",
+                imagenes: ["imagenes/hoja.png", "imagenes/hoja1.png", "imagenes/hoja2.png"],
+                tallas: [{talla:"4",precio:416000}, {talla:"4.5",precio:416000}, {talla:"5",precio:416000}, {talla:"5.5",precio:416000}, {talla:"6",precio:416000}, {talla:"6.5",precio:416000}, {talla:"7",precio:416000}, {talla:"7.5",precio:416000}, {talla:"8",precio:416000}, {talla:"8.5",precio:416000}, {talla:"9",precio:416000}, {talla:"9.5",precio:416000}, {talla:"10",precio:100000}, {talla:"10.5",precio:100000}, {talla:"11",precio:100000}, {talla:"11.5",precio:100000}, {talla:"12",precio:100000}, {talla:"12.5",precio:100000}, {talla:"13",precio:100000}]
             },
             {
-                id: "an-12", nombre: "ARGOLLA LAZO INFINITO", categoriaDOM: "anillos", disponible: true,materiales: "Engaste en Canal / Circón", precio: 456600,
-                descripcion: "Lazo delicado de una sola pieza de plata esterlina que abraza un circón suizo.",
-                imagenes: ["imagenes/lazo.png", "imagenes/lazo1.png", "imagenes/lazo2.png"]
+                id: "an-12", nombre: "ARGOLLA LAZO INFINITO", categoriaDOM: "anillos", disponible: true, materiales: "Engaste en Canal / Circón", precio: 456600,
+                descripcion: "Lazo delicado de una sola pieza de plata esterlina...",
+                imagenes: ["imagenes/lazo.png", "imagenes/lazo1.png", "imagenes/lazo2.png"],
+                tallas: [{talla:"4",precio:456600}, {talla:"4.5",precio:456600}, {talla:"5",precio:456600}, {talla:"5.5",precio:456600}, {talla:"6",precio:456600}, {talla:"6.5",precio:456600}, {talla:"7",precio:456600}, {talla:"7.5",precio:456600}, {talla:"8",precio:456600}, {talla:"8.5",precio:456600}, {talla:"9",precio:456600}, {talla:"9.5",precio:456600}, {talla:"10",precio:100000}, {talla:"10.5",precio:100000}, {talla:"11",precio:100000}, {talla:"11.5",precio:100000}, {talla:"12",precio:100000}, {talla:"12.5",precio:100000}, {talla:"13",precio:100000}]
             },
             {
-                id: "an-13", nombre: "AGUA MINERALE", categoriaDOM: "anillos", disponible: true,materiales: "Engaste en Canal", precio: 483600,
-                descripcion: "Piedra talla marquise flotante entre dos láminas uniformes de plata esterlina.",
-                imagenes: ["imagenes/agua.png", "imagenes/agua1.png", "imagenes/agua2.png"]
+                id: "an-13", nombre: "AGUA MINERALE", categoriaDOM: "anillos", disponible: true, materiales: "Engaste en Canal", precio: 483600,
+                descripcion: "Piedra talla marquise flotante entre dos láminas...",
+                imagenes: ["imagenes/agua.png", "imagenes/agua1.png", "imagenes/agua2.png"],
+                tallas: [{talla:"4",precio:483600}, {talla:"4.5",precio:483600}, {talla:"5",precio:483600}, {talla:"5.5",precio:483600}, {talla:"6",precio:483600}, {talla:"6.5",precio:483600}, {talla:"7",precio:483600}, {talla:"7.5",precio:483600}, {talla:"8",precio:483600}, {talla:"8.5",precio:483600}, {talla:"9",precio:483600}, {talla:"9.5",precio:483600}, {talla:"10",precio:100000}, {talla:"10.5",precio:100000}, {talla:"11",precio:100000}, {talla:"11.5",precio:100000}, {talla:"12",precio:100000}, {talla:"12.5",precio:100000}, {talla:"13",precio:100000}]
             },
             {
-                id: "an-14", nombre: "PUENTE AZUL", categoriaDOM: "anillos", disponible: true,materiales: "Engaste en Canal", precio: 604900,
+                id: "an-14", nombre: "PUENTE AZUL", categoriaDOM: "anillos", disponible: true, materiales: "Engaste en Canal", precio: 604900,
                 descripcion: "Engaste seguro y limpio para lucir hermosos circones azul zafiro.",
-                imagenes: ["imagenes/azul.png", "imagenes/azul1.png", "imagenes/azul2.png"]
+                imagenes: ["imagenes/azul.png", "imagenes/azul1.png", "imagenes/azul2.png"],
+                tallas: [{talla:"4",precio:604900}, {talla:"4.5",precio:604900}, {talla:"5",precio:604900}, {talla:"5.5",precio:604900}, {talla:"6",precio:604900}, {talla:"6.5",precio:604900}, {talla:"7",precio:604900}, {talla:"7.5",precio:604900}, {talla:"8",precio:604900}, {talla:"8.5",precio:604900}, {talla:"9",precio:604900}, {talla:"9.5",precio:604900}, {talla:"10",precio:100000}, {talla:"10.5",precio:100000}, {talla:"11",precio:100000}, {talla:"11.5",precio:100000}, {talla:"12",precio:100000}, {talla:"12.5",precio:100000}, {talla:"13",precio:100000}]
             },
-            // CATEGORÍA: ARETES (Filtro: oreja)
-           
+            
+            // CATEGORÍA: ARETES
             {
                 id: "art-01", nombre: "ENTORCHADO INFINITO", categoriaDOM: "oreja", disponible: true,  materiales: "Plata Esterlina", precio: 428000,
-                descripcion: "Curvas simétricas inspiradas en lo hermoso de lo que no tiene fin. Diseño moderno ante las clásicas candongas.",
+                descripcion: "Curvas simétricas inspiradas en lo hermoso de lo que no tiene fin.",
                 imagenes: ["imagenes/entorchado.png", "imagenes/entorchado1.png", "imagenes/entorchado2.png"]
             },
             {
                 id: "art-02", nombre: "PERLAS DE AMOR", categoriaDOM: "oreja", disponible: false, materiales: "Plata Esterlina / Perla Natural", precio: 656000,
-                descripcion: "Perlas gemelas naturales abrazadas por una caja de plata decorada con un corazón.",
+                descripcion: "Perlas gemelas naturales abrazadas por una caja de plata.",
                 imagenes: ["imagenes/perlasamor.png", "imagenes/perlasamor1.png", "imagenes/perlasamor2.png"]
             },
             {
@@ -243,74 +265,77 @@
             },
             {
                 id: "art-04", nombre: "CIRCUNFERENCIA PERFECTA", categoriaDOM: "oreja", disponible: true,  materiales: "Plata Esterlina / Circón Suizo", precio: 396000,
-                descripcion: "Circones Suizos abrazados por plata esterlina que crean un toque sutil y elegante",
+                descripcion: "Circones Suizos abrazados por plata esterlina.",
                 imagenes: ["imagenes/circunp1.png", "imagenes/circunp2.png"]
             },
             {
                 id: "art-05", nombre: "MUNDO OVALADO", categoriaDOM: "oreja", disponible: true, materiales: "Plata Esterlina / Circón Zafiro", precio: 496000,
-                descripcion: "Delicado conjunto con circones suizos ovalados azul zafiro y engaste clásico de uñas.",
+                descripcion: "Delicado conjunto con circones suizos ovalados azul zafiro.",
                 imagenes: ["imagenes/MUNDO.png", "imagenes/MUNDO1.png", "imagenes/MUNDO2.png"]
             },
             {
                 id: "art-06", nombre: "VENTANAS AL MUNDO", categoriaDOM: "oreja", disponible: false, materiales: "Plata Esterlina / Ónix", precio: 429000,
-                descripcion: "Geometría simétrica con un hermoso ónix talla cabujón, expresando transparencia.",
+                descripcion: "Geometría simétrica con un hermoso ónix talla cabujón.",
                 imagenes: ["imagenes/ventana.png", "imagenes/ventana1.png", "imagenes/ventana2.png"]
             },
             {
                 id: "art-07", nombre: "CRÁTER DE LUNA", categoriaDOM: "oreja", disponible: false, materiales: "Plata Esterlina / Ónix", precio: 383000,
-                descripcion: "Geometría simétrica con un hermoso ónix talla cabujón, expresando transparencia.",
+                descripcion: "Geometría simétrica con un hermoso ónix talla cabujón.",
                 imagenes: [""]
             },
             
-            // CATEGORÍA: COLLARES (Filtro: cuello)
+            // CATEGORÍA: COLLARES
             {
                 id: "col-01", nombre: "VENTANA SUBMARINA", categoriaDOM: "cuello", disponible: true,materiales: "Plata 925 / Acrílico Ámbar", precio: 631700,
-                descripcion: "Un marco de plata ley italiana, firme y brillante, rodea un disco de acrílico amarillo donde la luz se detiene. Colgada de tu cuello, es una ventana pequeña que te deja asomarte a otra profundidad.",
+                descripcion: "Un marco de plata ley italiana, firme y brillante, rodea un disco de acrílico.",
                 imagenes: ["imagenes/sub.png", "imagenes/sub1.png"]
             },
             {
                 id: "col-02", nombre: "VENTANA DE AMOR", categoriaDOM: "cuello", disponible: true,materiales: "Plata 925 / Acrílico", precio: 716600,
-                descripcion: "Enmarcado en plata de ley italiana, un corazón acrílico rojo, con remaches y mirada de submarino donde la originalidad y la alta joyería se mezclan",
+                descripcion: "Enmarcado en plata de ley italiana, un corazón acrílico rojo.",
                 imagenes: ["imagenes/cor1.png", "imagenes/cor.png"] 
             },
             {
                 id: "col-03", nombre: "PERLA MAR EN TU CUELLO", categoriaDOM: "cuello", disponible: true,materiales: "Plata 925 / Acrílico", precio: 434900,
-                descripcion: "Diseño único inspirado en el proceso que lleva al nacimiento de una hermosa perla.",
+                descripcion: "Diseño único inspirado en el proceso que lleva al nacimiento de una perla.",
                 imagenes: ["imagenes/perla.png", "imagenes/perla1.png"]
             },
-            // CATEGORÍA: BRAZALETES (Filtro: muneca)
+            
+            // CATEGORÍA: BRAZALETES
             {
                 id: "brz-01", nombre: "BRAZALETE 777", categoriaDOM: "muneca", disponible: false,materiales: "Plata 925 / Acrílico", precio: 415000,
-                descripcion: "Inspirado en la idea de perfección con un centro de acrílico amarillo con fuertes remaches y broche de seguridad.",
+                descripcion: "Inspirado en la idea de perfección con un centro de acrílico amarillo.",
                 imagenes: ["imagenes/777.png"]
             },
             {
                 id: "brz-02", nombre: "CRATER DE LUNA", categoriaDOM: "muneca", disponible: true,materiales: "Plata 925", precio: 415000,
-                descripcion: "Brazalete inspirado en la perfecta irregularidad de los cráteres lunares en plata de ley italiana.",
+                descripcion: "Brazalete inspirado en la perfecta irregularidad de los cráteres lunares.",
                 imagenes: [""]
             }
         ];
 
         // RENDERIZADO Y LÓGICA DE CARRUSEL
         const galeria = document.getElementById('galeria-productos');
+        let cart = JSON.parse(localStorage.getItem('ambarino_cart')) || [];
+        let productoSeleccionadoParaModal = null;
 
-        catalogo.forEach((prod, index) => {
-            // Generar imágenes del carrusel
+        document.addEventListener('DOMContentLoaded', () => { renderCart(); });
+
+        catalogo.forEach((prod) => {
             let imgsHTML = '';
             prod.imagenes.forEach((img, i) => {
                 let isActive = i === 0 ? 'active' : '';
                 imgsHTML += `<img src="${img}" class="slide-${prod.id} ${isActive}" alt="${prod.nombre}">`;
             });
 
-            // Generar HTML de la Tarjeta
-            
-            // 1. Evaluamos si hay stock para saber qué botón dibujar
             let botonCartHTML = '';
             if (prod.disponible === false) {
-                // Botón bloqueado y en color rojo oscuro
                 botonCartHTML = `<button class="btn-agregar" style="color: #a34141; border-bottom-color: #a34141; cursor: not-allowed;" disabled>Agotado</button>`;
+            } else if (prod.tallas) {
+                // Si el producto tiene tallas, el botón abre el modal
+                botonCartHTML = `<button class="btn-agregar" onclick="abrirModal('${prod.id}')">Seleccionar Talla</button>`;
             } else {
-                // Botón normal interactivo
+                // Si no tiene tallas (collares, aretes), lo agrega directo
                 botonCartHTML = `<button class="btn-agregar" onclick="addToCart('${prod.id}', '${prod.nombre}', ${prod.precio})">Agregar a la Bolsa</button>`;
             }
 
@@ -331,7 +356,6 @@
             `;
             galeria.appendChild(card);
 
-            // Activar Carrusel Automático (Solo si tiene > 1 foto)
             if (prod.imagenes.length > 1) {
                 let currentSlide = 0;
                 const slides = document.querySelectorAll(`.slide-${prod.id}`);
@@ -339,19 +363,73 @@
                     slides[currentSlide].classList.remove('active');
                     currentSlide = (currentSlide + 1) % slides.length;
                     slides[currentSlide].classList.add('active');
-                }, 3000); // Cambio de foto cada 3 segundos
+                }, 3000); 
             }
         });
 
         // ---------------------------------------------------------------- //
-        // FUNCIONES DE INTERFAZ Y CARRITO CON ENVÍOS
+        // LÓGICA DE MODAL PARA TALLAS Y PRECIOS
+        // ---------------------------------------------------------------- //
+        const modal = document.getElementById('modal-tallas');
+        const selectTalla = document.getElementById('modal-selector-talla');
+        const precioModalUI = document.getElementById('modal-precio-producto');
+        const btnAgregarModal = document.getElementById('btn-agregar-modal');
+
+        function abrirModal(idProducto) {
+            productoSeleccionadoParaModal = catalogo.find(p => p.id === idProducto);
+            document.getElementById('modal-nombre-producto').innerText = productoSeleccionadoParaModal.nombre;
+            
+            // Limpiar opciones previas
+            selectTalla.innerHTML = '';
+            
+            // Llenar selector
+            productoSeleccionadoParaModal.tallas.forEach(item => {
+                const opt = document.createElement('option');
+                opt.value = item.talla;
+                opt.textContent = `Talla ${item.talla}`;
+                opt.dataset.precio = item.precio;
+                selectTalla.appendChild(opt);
+            });
+
+            // Actualizar precio base visual inicial
+            actualizarPrecioModal(productoSeleccionadoParaModal.tallas[0].precio);
+            
+            modal.classList.add('active');
+        }
+
+        function cerrarModal() {
+            modal.classList.remove('active');
+            productoSeleccionadoParaModal = null;
+        }
+
+        selectTalla.addEventListener('change', function(e) {
+            const opcion = e.target.options[e.target.selectedIndex];
+            actualizarPrecioModal(opcion.dataset.precio);
+        });
+
+        function actualizarPrecioModal(precio) {
+            precioModalUI.innerText = `$${parseInt(precio).toLocaleString('es-CO')} COP`;
+        }
+
+        btnAgregarModal.addEventListener('click', () => {
+            const opcionSeleccionada = selectTalla.options[selectTalla.selectedIndex];
+            const talla = opcionSeleccionada.value;
+            const precioActualizado = parseInt(opcionSeleccionada.dataset.precio);
+            
+            // Lo enviamos al carrito especificando la talla en el nombre
+            const nombreConTalla = `${productoSeleccionadoParaModal.nombre} - Talla: ${talla}`;
+            // Agregamos un identificador único para esa talla
+            const idConTalla = `${productoSeleccionadoParaModal.id}-T${talla}`; 
+            
+            addToCart(idConTalla, nombreConTalla, precioActualizado);
+            cerrarModal();
+        });
+
+
+        // ---------------------------------------------------------------- //
+        // FUNCIONES DE INTERFAZ Y CARRITO 
         // ---------------------------------------------------------------- //
         
-        let cart = JSON.parse(localStorage.getItem('ambarino_cart')) || [];
-        let costoEnvio = 0; // NUEVO: Variable para el envío
-
-        document.addEventListener('DOMContentLoaded', () => { renderCart(); });
-
         // Filtros del Catálogo
         const filterBtns = document.querySelectorAll('.btn-categoria');
         filterBtns.forEach(btn => {
@@ -359,7 +437,7 @@
                 filterBtns.forEach(b => b.classList.remove('active'));
                 e.target.classList.add('active');
                 const filterValue = e.target.getAttribute('data-filter');
-                const products = document.querySelectorAll('.tarjeta-producto'); // Recargar nodos dinámicos
+                const products = document.querySelectorAll('.tarjeta-producto');
                 
                 products.forEach(prod => {
                     if (filterValue === 'all' || prod.getAttribute('data-category') === filterValue) {
@@ -391,38 +469,18 @@
             renderCart();
         }
 
-        // NUEVO: Función para actualizar el tipo de envío
-        function actualizarEnvio() {
-            const tipo = document.querySelector('input[name="tipo_envio"]:checked').value;
-            const campoDir = document.getElementById('campo-direccion');
-            
-            if (tipo === 'domicilio') {
-                costoEnvio = 15000; 
-                campoDir.style.display = 'block';
-            } else {
-                costoEnvio = 0;
-                campoDir.style.display = 'none';
-            }
-            renderCart(); 
-        }
-
         function renderCart() {
             const container = document.getElementById('cart-items-container');
             const counter = document.getElementById('cart-counter');
             const totalUI = document.getElementById('cart-total-price');
-            const seccionEnvio = document.getElementById('opciones-envio'); // NUEVO
             
             container.innerHTML = '';
-            
             if (cart.length === 0) {
                 container.innerHTML = '<p style="text-align:center; opacity:0.5; font-size:11px; margin-top: 50px;">Bolsa vacía.</p>';
                 counter.innerText = '0';
                 totalUI.innerText = '$0 COP';
-                seccionEnvio.style.display = 'none'; // NUEVO
                 return;
             }
-
-            seccionEnvio.style.display = 'block'; // NUEVO
 
             let totalItems = 0; let totalPrice = 0;
             cart.forEach(item => {
@@ -440,45 +498,19 @@
                     </div>
                 `;
             });
-
-            // NUEVO: Sumamos el envío
-            let totalConEnvio = totalPrice + costoEnvio; 
-            
             counter.innerText = totalItems;
-            totalUI.innerText = `$${totalConEnvio.toLocaleString('es-CO')} COP`; 
+            totalUI.innerText = `$${totalPrice.toLocaleString('es-CO')} COP`;
         }
 
         function initCheckout() {
             if (cart.length === 0) return;
-
-            // NUEVO: Capturar datos de envío
-            const tipoEnvio = document.querySelector('input[name="tipo_envio"]:checked').value;
-            const direccion = document.getElementById('direccion-input').value;
-            let notaEnvio = "";
-
-            if (tipoEnvio === 'domicilio') {
-                if (direccion.trim() === "") {
-                    alert("Por favor, ingresa tu dirección completa y ciudad para el envío.");
-                    return; 
-                }
-                notaEnvio = ` | ENVÍO A: ${direccion}`;
-            } else {
-                notaEnvio = ` | RECOGE EN ESTUDIO`;
-            }
-
-            const totalJoyas = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-            const totalAmount = totalJoyas + costoEnvio; 
-            const cartDescription = cart.map(item => `${item.quantity}x ${item.name}`).join(' | ') + notaEnvio;
+            const totalAmount = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+            const cartDescription = cart.map(item => `${item.quantity}x ${item.name}`).join(' | ');
 
             var handler = ePayco.checkout.configure({ key: 'f2acf1482aa1614b4e5f3ce51372bf8d', test: false });
             handler.open({
-                name: "Ambarino 1998", 
-                description: cartDescription, 
-                currency: "cop", 
-                amount: totalAmount.toString(),
-                tax_base: "0", tax: "0", country: "co", lang: "es", external: "false",
-                extra1: tipoEnvio === 'domicilio' ? "Envío Nacional" : "Recogida Local", // NUEVO
-                extra2: direccion // NUEVO
+                name: "Ambarino 1998", description: cartDescription, currency: "cop", amount: totalAmount.toString(),
+                tax_base: "0", tax: "0", country: "co", lang: "es", external: "false"
             });
         }
     </script>
