@@ -297,6 +297,14 @@
             document.getElementById('talla-texto-actual').innerText = "TALLA SELECCIONADA: " + talla;
             document.getElementById('caja-tallas').style.display = 'none';
         }
+        function toggleTallas() {
+            const caja = document.getElementById('caja-tallas');
+            if (caja.style.display === 'none' || caja.style.display === '') {
+                caja.style.display = 'flex';
+            } else {
+                caja.style.display = 'none';
+            }
+        }
 
         // 3. LÓGICA DEL CARRITO
         function toggleCart() { document.getElementById('cart-drawer').classList.toggle('is-open'); }
