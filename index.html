@@ -151,9 +151,27 @@
             <h2 style="font-size: 24px;">Tu Selección</h2>
             <button class="btn-close" onclick="toggleCart()">&times;</button>
         </div>
+        
         <div class="cart-body" id="cart-items-container"></div>
+        
+        <!-- SECCIÓN DE ENVÍO AGREGADA -->
+        <div id="opciones-envio" style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px; display: none;">
+            <p style="font-size: 11px; font-weight: bold; margin-bottom: 10px; letter-spacing: 1px; color: var(--texto-suave);">MÉTODO DE ENTREGA</p>
+            <label style="display: block; font-size: 12px; margin-bottom: 5px; cursor: pointer;">
+                <input type="radio" name="tipo_envio" value="recogida" checked onchange="actualizarEnvio()">
+                Recoger en el Estudio (Gratis)
+            </label>
+            <label style="display: block; font-size: 12px; margin-bottom: 10px; cursor: pointer;">
+                <input type="radio" name="tipo_envio" value="domicilio" onchange="actualizarEnvio()">
+                Envío Nacional ($15.000 COP)
+            </label>
+            <div id="campo-direccion" style="display: none;">
+                <input type="text" id="direccion-input" placeholder="Escribe tu Dirección, Barrio y Ciudad..." style="width: 100%; padding: 10px; font-size: 11px; border: 1px solid var(--color-cafe); font-family: 'Montserrat', sans-serif;">
+            </div>
+        </div>
+
         <div class="cart-footer">
-            <div class="cart-total"><span>Subtotal</span><span id="cart-total-price">$0 COP</span></div>
+            <div class="cart-total"><span>Total a Pagar</span><span id="cart-total-price">$0 COP</span></div>
             <button class="btn-checkout" onclick="initCheckout()">Finalizar Compra</button>
         </div>
     </aside>
@@ -164,8 +182,9 @@
     </footer>
 
     <script>
-        // LÓGICA DE CARRITO CON MEMORIA (LOCAL STORAGE)
+        // LÓGICA DE CARRITO CON MEMORIA (LOCAL STORAGE) Y ENVÍOS
         let cart = JSON.parse(localStorage.getItem('ambarino_cart')) || [];
+        let costoEnvio = 0; // NUEVO: Variable para el envío
 
         window.addEventListener('scroll', () => {
             const header = document.getElementById('site-header');
@@ -183,10 +202,26 @@
             renderCart();
         }
 
+        // NUEVO: Función para actualizar el tipo de envío
+        function actualizarEnvio() {
+            const tipo = document.querySelector('input[name="tipo_envio"]:checked').value;
+            const campoDir = document.getElementById('campo-direccion');
+            
+            if (tipo === 'domicilio') {
+                costoEnvio = 15000; 
+                campoDir.style.display = 'block';
+            } else {
+                costoEnvio = 0;
+                campoDir.style.display = 'none';
+            }
+            renderCart(); 
+        }
+
         function renderCart() {
             const container = document.getElementById('cart-items-container');
             const counter = document.getElementById('cart-counter');
             const totalUI = document.getElementById('cart-total-price');
+            const seccionEnvio = document.getElementById('opciones-envio'); // NUEVO
             
             container.innerHTML = '';
             
@@ -194,8 +229,11 @@
                 container.innerHTML = '<p style="text-align:center; opacity:0.5; font-size:11px; margin-top: 50px;">Bolsa vacía.</p>';
                 counter.innerText = '0';
                 totalUI.innerText = '$0 COP';
+                seccionEnvio.style.display = 'none'; // NUEVO
                 return;
             }
+
+            seccionEnvio.style.display = 'block'; // NUEVO
 
             let totalItems = 0; let totalPrice = 0;
             cart.forEach(item => {
@@ -206,28 +244,4 @@
                     <div class="cart-item">
                         <div>
                             <strong>${item.name}</strong>
-                            <span style="color:var(--texto-suave); display:block; font-size:10px;">${item.quantity} x $${item.price.toLocaleString('es-CO')}</span>
-                            <button class="btn-remove" onclick="removeFromCart('${item.id}')">Eliminar</button>
-                        </div>
-                        <div style="font-weight: 500;">$${lineTotal.toLocaleString('es-CO')}</div>
-                    </div>
-                `;
-            });
-            counter.innerText = totalItems;
-            totalUI.innerText = `$${totalPrice.toLocaleString('es-CO')} COP`;
-        }
-
-        function initCheckout() {
-            if (cart.length === 0) return;
-            const totalAmount = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-            const cartDescription = cart.map(item => `${item.quantity}x ${item.name}`).join(' | ');
-
-            var handler = ePayco.checkout.configure({ key: 'f2acf1482aa1614b4e5f3ce51372bf8d', test: false });
-            handler.open({
-                name: "Ambarino 1998", description: cartDescription, currency: "cop", amount: totalAmount.toString(),
-                tax_base: "0", tax: "0", country: "co", lang: "es", external: "false"
-            });
-        }
-    </script>
-</body>
-</html>
+                            <span style="color:var(--texto-su
