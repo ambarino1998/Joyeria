@@ -160,8 +160,25 @@
             <button class="btn-close" onclick="toggleCart()">&times;</button>
         </div>
         <div class="cart-body" id="cart-items-container"></div>
+        
+        <!-- NUEVA SECCIÓN DE ENVÍO -->
+        <div id="opciones-envio" style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
+            <p style="font-size: 11px; font-weight: bold; margin-bottom: 10px; letter-spacing: 1px; color: var(--texto-suave);">MÉTODO DE ENTREGA</p>
+            <label style="display: block; font-size: 12px; margin-bottom: 5px; cursor: pointer;">
+                <input type="radio" name="tipo_envio" value="recogida" checked onchange="actualizarEnvio()">
+                Recoger en el Estudio (Gratis)
+            </label>
+            <label style="display: block; font-size: 12px; margin-bottom: 10px; cursor: pointer;">
+                <input type="radio" name="tipo_envio" value="domicilio" onchange="actualizarEnvio()">
+                Envío Nacional ($15.000 COP)
+            </label>
+            <div id="campo-direccion" style="display: none;">
+                <input type="text" id="direccion-input" placeholder="Escribe tu Dirección, Barrio y Ciudad..." style="width: 100%; padding: 10px; font-size: 11px; border: 1px solid var(--color-cafe); font-family: 'Montserrat', sans-serif;">
+            </div>
+        </div>
+
         <div class="cart-total" style="display: flex; justify-content: space-between; font-weight: 500; font-size: 16px; margin-top: 20px; font-family: 'Cormorant Garamond', serif;">
-            <span>Subtotal</span><span id="cart-total-price">$0 COP</span>
+            <span>Total a Pagar</span><span id="cart-total-price">$0 COP</span>
         </div>
         <button class="btn-checkout" onclick="initCheckout()">Finalizar Compra</button>
     </aside>
@@ -340,11 +357,63 @@
             renderCart();
         }
 
+        let costoEnvio = 0; // Nueva variable global
+
+        function actualizarEnvio() {
+            const tipo = document.querySelector('input[name="tipo_envio"]:checked').value;
+            const campoDir = document.getElementById('campo-direccion');
+            
+            if (tipo === 'domicilio') {
+                costoEnvio = 15000; // Aquí pones el valor real de tu envío
+                campoDir.style.display = 'block';
+            } else {
+                costoEnvio = 0;
+                campoDir.style.display = 'none';
+            }
+            renderCart(); // Recalcula el total
+        }
+
         function renderCart() {
             const container = document.getElementById('cart-items-container');
             const counter = document.getElementById('cart-counter');
             const totalUI = document.getElementById('cart-total-price');
+            const seccionEnvio = document.getElementById('opciones-envio');
             
+            container.innerHTML = '';
+            if (cart.length === 0) {
+                container.innerHTML = '<p style="text-align:center; opacity:0.5; font-size:11px; margin-top: 50px;">Bolsa vacía.</p>';
+                counter.innerText = '0';
+                totalUI.innerText = '$0 COP';
+                seccionEnvio.style.display = 'none'; // Oculta opciones de envío si está vacío
+                return;
+            }
+
+            seccionEnvio.style.display = 'block'; // Muestra opciones si hay joyas
+            let totalItems = 0; 
+            let totalPrice = 0;
+            
+            cart.forEach(item => {
+                totalItems += item.quantity;
+                let lineTotal = item.price * item.quantity;
+                totalPrice += lineTotal;
+                container.innerHTML += `
+                    <div class="cart-item">
+                        <div>
+                            <strong style="display:block; margin-bottom:4px;">${item.name}</strong>
+                            <span style="color:var(--texto-suave); font-size:10px;">${item.quantity} x $${item.price.toLocaleString('es-CO')}</span>
+                            <button onclick="removeFromCart('${item.id}')" style="background:none; border:none; color:#a34141; cursor:pointer; font-size:9px; text-decoration:underline; display:block; margin-top:6px;">Eliminar</button>
+                        </div>
+                        <div style="font-weight: 500;">$${lineTotal.toLocaleString('es-CO')}</div>
+                    </div>
+                `;
+            });
+            
+            // Sumamos el envío al total final
+            let totalConEnvio = totalPrice + costoEnvio;
+            
+            counter.innerText = totalItems;
+            totalUI.innerText = `$${totalConEnvio.toLocaleString('es-CO')} COP`;
+        }
             container.innerHTML = '';
             if (cart.length === 0) {
                 container.innerHTML = '<p style="text-align:center; opacity:0.5; font-size:11px; margin-top: 50px;">Bolsa vacía.</p>';
@@ -376,15 +445,44 @@
         // 4. PASARELA DE PAGOS
         function initCheckout() {
             if (cart.length === 0) return;
-            const totalAmount = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-            const cartDescription = cart.map(item => `${item.quantity}x ${item.name}`).join(' | ');
+            
+            // Validar método de envío y dirección
+            const tipoEnvio = document.querySelector('input[name="tipo_envio"]:checked').value;
+            const direccion = document.getElementById('direccion-input').value;
+            let notaEnvio = "";
 
-            // ¡IMPORTANTE! RECUERDA CAMBIAR LA LLAVE "f2acf..." POR TU PUBLIC KEY REAL DE EPAYCO AQUÍ ABAJO
+            if (tipoEnvio === 'domicilio') {
+                if (direccion.trim() === "") {
+                    alert("Por favor, ingresa tu dirección completa y ciudad para el envío.");
+                    return; // Detiene el pago hasta que pongan la dirección
+                }
+                notaEnvio = ` | ENVÍO A: ${direccion}`;
+            } else {
+                notaEnvio = ` | RECOGE EN ESTUDIO`;
+            }
+
+            // Calculamos el total de joyas + el envío
+            const totalJoyas = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+            const totalAmount = totalJoyas + costoEnvio;
+            
+            // Agregamos la nota de envío a la descripción del recibo
+            const cartDescription = cart.map(item => `${item.quantity}x ${item.name}`).join(', ') + notaEnvio;
+
             var handler = ePayco.checkout.configure({ key: 'f2acf1482aa1614b4e5f3ce51372bf8d', test: false });
             
             handler.open({
-                name: "Ambarino 1998", description: cartDescription, currency: "cop", amount: totalAmount.toString(),
-                tax_base: "0", tax: "0", country: "co", lang: "es", external: "false"
+                name: "Ambarino 1998", 
+                description: cartDescription, 
+                currency: "cop", 
+                amount: totalAmount.toString(),
+                tax_base: "0", 
+                tax: "0", 
+                country: "co", 
+                lang: "es", 
+                external: "false",
+                // Datos adicionales ocultos que viajan a tu panel
+                extra1: tipoEnvio === 'domicilio' ? "Envío Nacional" : "Recogida Local",
+                extra2: direccion
             });
         }
     </script>
