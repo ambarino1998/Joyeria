@@ -244,4 +244,54 @@
                     <div class="cart-item">
                         <div>
                             <strong>${item.name}</strong>
-                            <span style="color:var(--texto-su
+                            <span style="color:var(--texto-suave); display:block; font-size:10px;">${item.quantity} x $${item.price.toLocaleString('es-CO')}</span>
+                            <button class="btn-remove" onclick="removeFromCart('${item.id}')">Eliminar</button>
+                        </div>
+                        <div style="font-weight: 500;">$${lineTotal.toLocaleString('es-CO')}</div>
+                    </div>
+                `;
+            });
+
+            // NUEVO: Sumamos el envío
+            let totalConEnvio = totalPrice + costoEnvio; 
+            
+            counter.innerText = totalItems;
+            totalUI.innerText = `$${totalConEnvio.toLocaleString('es-CO')} COP`; 
+        }
+
+        function initCheckout() {
+            if (cart.length === 0) return;
+
+            // NUEVO: Capturar datos de envío
+            const tipoEnvio = document.querySelector('input[name="tipo_envio"]:checked').value;
+            const direccion = document.getElementById('direccion-input').value;
+            let notaEnvio = "";
+
+            if (tipoEnvio === 'domicilio') {
+                if (direccion.trim() === "") {
+                    alert("Por favor, ingresa tu dirección completa y ciudad para el envío.");
+                    return; 
+                }
+                notaEnvio = ` | ENVÍO A: ${direccion}`;
+            } else {
+                notaEnvio = ` | RECOGE EN ESTUDIO`;
+            }
+
+            const totalJoyas = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+            const totalAmount = totalJoyas + costoEnvio; 
+            const cartDescription = cart.map(item => `${item.quantity}x ${item.name}`).join(' | ') + notaEnvio;
+
+            var handler = ePayco.checkout.configure({ key: 'f2acf1482aa1614b4e5f3ce51372bf8d', test: false });
+            handler.open({
+                name: "Ambarino 1998", 
+                description: cartDescription, 
+                currency: "cop", 
+                amount: totalAmount.toString(),
+                tax_base: "0", tax: "0", country: "co", lang: "es", external: "false",
+                extra1: tipoEnvio === 'domicilio' ? "Envío Nacional" : "Recogida Local", // NUEVO
+                extra2: direccion // NUEVO
+            });
+        }
+    </script>
+</body>
+</html>
