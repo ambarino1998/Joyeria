@@ -162,7 +162,7 @@
         <div class="cart-body" id="cart-items-container"></div>
         
         <!-- NUEVA SECCIÓN DE ENVÍO -->
-        <div id="opciones-envio" style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
+        <div id="opciones-envio" style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px; display: none;">
             <p style="font-size: 11px; font-weight: bold; margin-bottom: 10px; letter-spacing: 1px; color: var(--texto-suave);">MÉTODO DE ENTREGA</p>
             <label style="display: block; font-size: 12px; margin-bottom: 5px; cursor: pointer;">
                 <input type="radio" name="tipo_envio" value="recogida" checked onchange="actualizarEnvio()">
@@ -184,10 +184,10 @@
     </aside>
 
     <script>
-        // 1. EL MISMO CATÁLOGO, AHORA LOS ANILLOS TIENEN TALLAS
+        // 1. EL CATÁLOGO CORREGIDO (Sin corchetes rotos)
         const catalogo = [
 { id: "an-01", nombre: "ARGOLLA CLÁSICA MEDIA CAÑA", disponible: true, materiales: "Enteramente Plata", tallas: [{talla:"4",precio:304900}, {talla:"4.5",precio:304900}, {talla:"5",precio:320900}, {talla:"5.5",precio:320900}, {talla:"6",precio:304900}, {talla:"6.5",precio:304900}, {talla:"7",precio:304900}, {talla:"7.5",precio:304900}, {talla:"8",precio:304900}, {talla:"8.5",precio:304900}, {talla:"9",precio:304900}, {talla:"9.5",precio:304900}, {talla:"10",precio:100000}, {talla:"10.5",precio:100000}, {talla:"11",precio:100000}, {talla:"11.5",precio:100000}, {talla:"12",precio:100000}, {talla:"12.5",precio:100000}, {talla:"13",precio:100000}], descripcion: "Una argolla clásica media caña en plata ley italiana...", imagenes: ["imagenes/clasica.png", "imagenes/clasica1.png", "imagenes/clasica2.png"] },
-{ id: "an-02", nombre: "ARGOLLAS CLÁSICAS MEDIA CAÑA", disponible: true, materiales: "Enteramente Plata", tallas: [{talla:"4",precio:439900}, {talla:"4.5",precio:439900}, {talla:"5",precio:439900}, {talla:"5.5",precio:439900}, {talla:"6",precio:439900}, {talla:"6.5",precio:439900}, {talla:"7",precio:439900}, {talla:"7.5",precio:439900}, {talla:"8",precio:439900}, {talla:"8",precio:439900}, {talla:"9",precio:439900}, {talla:"9.5",precio:439900}, {talla:"10",precio:100000}, {talla:"10.5",precio:100000}, {talla:"11",precio:100000}, {talla:"11.5",precio:100000}, {talla:"12",precio:100000}, {talla:"12.5",precio:100000}, {talla:"13",precio:100000}], descripcion: "Dos argollas media caña en plata ley italiana...", imagenes: ["imagenes/mediac.png", "imagenes/mediac1.png", "imagenes/mediac2.png", "imagenes/mediac3.png"] },
+{ id: "an-02", nombre: "ARGOLLAS CLÁSICAS MEDIA CAÑA", disponible: true, materiales: "Enteramente Plata", tallas: [{talla:"4",precio:439900}, {talla:"4.5",precio:439900}, {talla:"5",precio:439900}, {talla:"5.5",precio:439900}, {talla:"6",precio:439900}, {talla:"6.5",precio:439900}, {talla:"7",precio:439900}, {talla:"7.5",precio:439900}, {talla:"8",precio:439900}, {talla:"8.5",precio:439900}, {talla:"9",precio:439900}, {talla:"9.5",precio:439900}, {talla:"10",precio:100000}, {talla:"10.5",precio:100000}, {talla:"11",precio:100000}, {talla:"11.5",precio:100000}, {talla:"12",precio:100000}, {talla:"12.5",precio:100000}, {talla:"13",precio:100000}], descripcion: "Dos argollas media caña en plata ley italiana...", imagenes: ["imagenes/mediac.png", "imagenes/mediac1.png", "imagenes/mediac2.png", "imagenes/mediac3.png"] },
 { id: "an-03", nombre: "ARGOLLA PLANA CLÁSICA", disponible: true, materiales: "Plata Esterlina", tallas: [{talla:"4",precio:304900}, {talla:"4.5",precio:304900}, {talla:"5",precio:304900}, {talla:"5.5",precio:304900}, {talla:"6",precio:304900}, {talla:"6.5",precio:304900}, {talla:"7",precio:304900}, {talla:"7.5",precio:304900}, {talla:"8",precio:304900}, {talla:"8.5",precio:304900}, {talla:"9",precio:304900}, {talla:"9.5",precio:304900}, {talla:"10",precio:100000}, {talla:"10.5",precio:100000}, {talla:"11",precio:100000}, {talla:"11.5",precio:100000}, {talla:"12",precio:100000}, {talla:"12.5",precio:100000}, {talla:"13",precio:100000}], descripcion: "Una argolla plana en plata ley italiana, de líneas limpias...", imagenes: ["imagenes/plana.png"] },
 { id: "an-04", nombre: "ARGOLLAS PLANAS CLÁSICAS", disponible: true, materiales: "Plata Esterlina", tallas: [{talla:"4",precio:439900}, {talla:"4.5",precio:439900}, {talla:"5",precio:439900}, {talla:"5.5",precio:439900}, {talla:"6",precio:439900}, {talla:"6.5",precio:439900}, {talla:"7",precio:439900}, {talla:"7.5",precio:439900}, {talla:"8",precio:439900}, {talla:"8.5",precio:439900}, {talla:"9",precio:439900}, {talla:"9.5",precio:439900}, {talla:"10",precio:100000}, {talla:"10.5",precio:100000}, {talla:"11",precio:100000}, {talla:"11.5",precio:100000}, {talla:"12",precio:100000}, {talla:"12.5",precio:100000}, {talla:"13",precio:100000}], descripcion: "Dos argollas planas en plata ley italiana...", imagenes: ["imagenes/plana.png", "imagenes/plana4.png", "imagenes/plana1.png", "imagenes/plana3.PNG"] },
 { id: "an-05", nombre: "ARGOLLA ENTORCHADA", disponible: true, materiales: "Enteramente Plata", tallas: [{talla:"4",precio:304900}, {talla:"4.5",precio:304900}, {talla:"5",precio:304900}, {talla:"5.5",precio:304900}, {talla:"6",precio:304900}, {talla:"6.5",precio:304900}, {talla:"7",precio:304900}, {talla:"7.5",precio:304900}, {talla:"8",precio:304900}, {talla:"8.5",precio:304900}, {talla:"9",precio:304900}, {talla:"9.5",precio:304900}, {talla:"10",precio:100000}, {talla:"10.5",precio:100000}, {talla:"11",precio:100000}, {talla:"11.5",precio:100000}, {talla:"12",precio:100000}, {talla:"12.5",precio:100000}, {talla:"13",precio:100000}], descripcion: "Una argolla entorchada en plata ley italiana...", imagenes: [] },
@@ -217,12 +217,13 @@
 { id: "brz-02", nombre: "CRATER DE LUNA", disponible: true, materiales: "Plata 925", precio: 415000, descripcion: "Brazalete inspirado en la perfecta irregularidad de los cráteres...", imagenes: [] }
 ];        
         
-        // 2. MAGIA DINÁMICA: Leer la URL y manejar tallas
+        // 2. MAGIA DINÁMICA: Leer la URL, Tallas y Fotos
         let productoActual = null;
         let cart = JSON.parse(localStorage.getItem('ambarino_cart')) || [];
         
         let tallaSeleccionada = null; 
         let precioSeleccionado = 0;
+        let costoEnvio = 0; 
 
         window.onload = () => {
             const params = new URLSearchParams(window.location.search);
@@ -235,11 +236,10 @@
                 document.getElementById('prod-desc').innerText = productoActual.descripcion;
                 document.getElementById('prod-mat').innerText = "✓ Material: " + productoActual.materiales;
                 
-                // --- LÓGICA DE TALLAS ---
+                // LÓGICA DE TALLAS CON MENÚ DESPLEGABLE
                 if (productoActual.tallas) {
                     document.getElementById('prod-price').innerText = "Desde $" + productoActual.tallas[0].precio.toLocaleString('es-CO');
                     
-                    // NUEVO MENÚ DESPLEGABLE
                     let tallasHTML = `
                         <div style="margin-bottom: 15px;">
                             <button onclick="toggleTallas()" style="width: 100%; padding: 12px 15px; background: transparent; border: 1px solid var(--color-cafe); text-align: left; cursor: pointer; font-size: 11px; font-family: 'Montserrat', sans-serif; letter-spacing: 1px; color: var(--color-cafe); display: flex; justify-content: space-between; align-items: center; transition: 0.3s;">
@@ -258,7 +258,7 @@
                 } else {
                     document.getElementById('prod-price').innerText = "$" + productoActual.precio.toLocaleString('es-CO');
                     precioSeleccionado = productoActual.precio;
-                    tallaSeleccionada = "Única"; // Para aretes, collares, etc.
+                    tallaSeleccionada = "Única"; 
                 }
                 
                 const estadoUI = document.getElementById('prod-estado');
@@ -302,18 +302,6 @@
             if (nueva >= 1) input.value = nueva;
         }
 
-        function elegirTalla(talla, precio, btnElement) {
-            tallaSeleccionada = talla;
-            precioSeleccionado = precio;
-            
-            document.getElementById('prod-price').innerText = "$" + precio.toLocaleString('es-CO');
-            document.querySelectorAll('.btn-talla').forEach(b => b.classList.remove('seleccionada'));
-            btnElement.classList.add('seleccionada');
-
-            // Actualizar el texto del botón y cerrar el menú
-            document.getElementById('talla-texto-actual').innerText = "TALLA SELECCIONADA: " + talla;
-            document.getElementById('caja-tallas').style.display = 'none';
-        }
         function toggleTallas() {
             const caja = document.getElementById('caja-tallas');
             if (caja.style.display === 'none' || caja.style.display === '') {
@@ -323,7 +311,20 @@
             }
         }
 
-        // 3. LÓGICA DEL CARRITO
+        function elegirTalla(talla, precio, btnElement) {
+            tallaSeleccionada = talla;
+            precioSeleccionado = precio;
+            
+            document.getElementById('prod-price').innerText = "$" + precio.toLocaleString('es-CO');
+            document.querySelectorAll('.btn-talla').forEach(b => b.classList.remove('seleccionada'));
+            btnElement.classList.add('seleccionada');
+
+            // Actualizar el texto y cerrar menú
+            document.getElementById('talla-texto-actual').innerText = "TALLA SELECCIONADA: " + talla;
+            document.getElementById('caja-tallas').style.display = 'none';
+        }
+
+        // 3. LÓGICA DEL CARRITO Y ENVÍOS
         function toggleCart() { document.getElementById('cart-drawer').classList.toggle('is-open'); }
 
         function agregarAlCarrito() {
@@ -357,20 +358,18 @@
             renderCart();
         }
 
-        let costoEnvio = 0; // Nueva variable global
-
         function actualizarEnvio() {
             const tipo = document.querySelector('input[name="tipo_envio"]:checked').value;
             const campoDir = document.getElementById('campo-direccion');
             
             if (tipo === 'domicilio') {
-                costoEnvio = 15000; // Aquí pones el valor real de tu envío
+                costoEnvio = 15000; 
                 campoDir.style.display = 'block';
             } else {
                 costoEnvio = 0;
                 campoDir.style.display = 'none';
             }
-            renderCart(); // Recalcula el total
+            renderCart(); 
         }
 
         function renderCart() {
@@ -384,11 +383,11 @@
                 container.innerHTML = '<p style="text-align:center; opacity:0.5; font-size:11px; margin-top: 50px;">Bolsa vacía.</p>';
                 counter.innerText = '0';
                 totalUI.innerText = '$0 COP';
-                seccionEnvio.style.display = 'none'; // Oculta opciones de envío si está vacío
+                seccionEnvio.style.display = 'none'; 
                 return;
             }
 
-            seccionEnvio.style.display = 'block'; // Muestra opciones si hay joyas
+            seccionEnvio.style.display = 'block'; 
             let totalItems = 0; 
             let totalPrice = 0;
             
@@ -408,45 +407,15 @@
                 `;
             });
             
-            // Sumamos el envío al total final
             let totalConEnvio = totalPrice + costoEnvio;
-            
             counter.innerText = totalItems;
             totalUI.innerText = `$${totalConEnvio.toLocaleString('es-CO')} COP`;
-        }
-            container.innerHTML = '';
-            if (cart.length === 0) {
-                container.innerHTML = '<p style="text-align:center; opacity:0.5; font-size:11px; margin-top: 50px;">Bolsa vacía.</p>';
-                counter.innerText = '0';
-                totalUI.innerText = '$0 COP';
-                return;
-            }
-
-            let totalItems = 0; let totalPrice = 0;
-            cart.forEach(item => {
-                totalItems += item.quantity;
-                let lineTotal = item.price * item.quantity;
-                totalPrice += lineTotal;
-                container.innerHTML += `
-                    <div class="cart-item">
-                        <div>
-                            <strong style="display:block; margin-bottom:4px;">${item.name}</strong>
-                            <span style="color:var(--texto-suave); font-size:10px;">${item.quantity} x $${item.price.toLocaleString('es-CO')}</span>
-                            <button onclick="removeFromCart('${item.id}')" style="background:none; border:none; color:#a34141; cursor:pointer; font-size:9px; text-decoration:underline; display:block; margin-top:6px;">Eliminar</button>
-                        </div>
-                        <div style="font-weight: 500;">$${lineTotal.toLocaleString('es-CO')}</div>
-                    </div>
-                `;
-            });
-            counter.innerText = totalItems;
-            totalUI.innerText = `$${totalPrice.toLocaleString('es-CO')} COP`;
         }
 
         // 4. PASARELA DE PAGOS
         function initCheckout() {
             if (cart.length === 0) return;
             
-            // Validar método de envío y dirección
             const tipoEnvio = document.querySelector('input[name="tipo_envio"]:checked').value;
             const direccion = document.getElementById('direccion-input').value;
             let notaEnvio = "";
@@ -454,20 +423,19 @@
             if (tipoEnvio === 'domicilio') {
                 if (direccion.trim() === "") {
                     alert("Por favor, ingresa tu dirección completa y ciudad para el envío.");
-                    return; // Detiene el pago hasta que pongan la dirección
+                    return; 
                 }
                 notaEnvio = ` | ENVÍO A: ${direccion}`;
             } else {
                 notaEnvio = ` | RECOGE EN ESTUDIO`;
             }
 
-            // Calculamos el total de joyas + el envío
             const totalJoyas = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
             const totalAmount = totalJoyas + costoEnvio;
             
-            // Agregamos la nota de envío a la descripción del recibo
             const cartDescription = cart.map(item => `${item.quantity}x ${item.name}`).join(', ') + notaEnvio;
 
+            // Recuerda que aquí está tu llave temporal. Asegúrate de poner tu Public Key real cuando vayas a vender.
             var handler = ePayco.checkout.configure({ key: 'f2acf1482aa1614b4e5f3ce51372bf8d', test: false });
             
             handler.open({
@@ -480,7 +448,6 @@
                 country: "co", 
                 lang: "es", 
                 external: "false",
-                // Datos adicionales ocultos que viajan a tu panel
                 extra1: tipoEnvio === 'domicilio' ? "Envío Nacional" : "Recogida Local",
                 extra2: direccion
             });
