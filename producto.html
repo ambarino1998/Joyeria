@@ -222,11 +222,21 @@
                 if (productoActual.tallas) {
                     document.getElementById('prod-price').innerText = "Desde $" + productoActual.tallas[0].precio.toLocaleString('es-CO');
                     
-                    let tallasHTML = '<p style="font-size: 11px; margin-bottom: 10px; letter-spacing: 1px; color: var(--texto-suave);">SELECCIONA TU TALLA (US):</p><div style="display:flex; gap:10px; flex-wrap:wrap;">';
+                    // NUEVO MENÚ DESPLEGABLE
+                    let tallasHTML = `
+                        <div style="margin-bottom: 15px;">
+                            <button onclick="toggleTallas()" style="width: 100%; padding: 12px 15px; background: transparent; border: 1px solid var(--color-cafe); text-align: left; cursor: pointer; font-size: 11px; font-family: 'Montserrat', sans-serif; letter-spacing: 1px; color: var(--color-cafe); display: flex; justify-content: space-between; align-items: center; transition: 0.3s;">
+                                <strong id="talla-texto-actual">SELECCIONA TU TALLA (US)</strong>
+                                <span style="font-size: 9px;">▼</span>
+                            </button>
+                            <div id="caja-tallas" style="display: none; padding-top: 15px; gap: 10px; flex-wrap: wrap;">
+                    `;
+                    
                     productoActual.tallas.forEach(t => {
                         tallasHTML += `<button class="btn-talla" onclick="elegirTalla('${t.talla}', ${t.precio}, this)">${t.talla}</button>`;
                     });
-                    tallasHTML += '</div>';
+                    
+                    tallasHTML += `</div></div>`;
                     document.getElementById('contenedor-tallas').innerHTML = tallasHTML;
                 } else {
                     document.getElementById('prod-price').innerText = "$" + productoActual.precio.toLocaleString('es-CO');
@@ -282,6 +292,10 @@
             document.getElementById('prod-price').innerText = "$" + precio.toLocaleString('es-CO');
             document.querySelectorAll('.btn-talla').forEach(b => b.classList.remove('seleccionada'));
             btnElement.classList.add('seleccionada');
+
+            // Actualizar el texto del botón y cerrar el menú
+            document.getElementById('talla-texto-actual').innerText = "TALLA SELECCIONADA: " + talla;
+            document.getElementById('caja-tallas').style.display = 'none';
         }
 
         // 3. LÓGICA DEL CARRITO
